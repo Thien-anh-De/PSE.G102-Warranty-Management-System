@@ -1,0 +1,1455 @@
+=== PAGE 1 ===
+ 
+ 
+1 
+CHƯƠNG 3. XÁC ĐỊNH YÊU CẦU 
+Chương này trình bày việc phân tích bài toán quản lý hoạt động bảo hành tại Công ty 
+máy tính Hưng Thiện để xác định những yêu cầu mà phần mềm cần đáp ứng. Nội dung bắt 
+đầu từ nhu cầu quản lý, phạm vi sử dụng, các đối tượng và quy trình nghiệp vụ; từ đó xây 
+dựng danh sách yêu cầu và mô hình hóa các chức năng trọng tâm. Phương pháp Peer 
+Review được sử dụng để rà soát tính rõ ràng, nhất quán và khả năng kiểm chứng của đặc 
+tả trước khi chuyển sang thiết kế. 
+Hệ thống có ba tác nhân: Admin, Kỹ thuật viên và Khách hàng. Các chi tiết nhận 
+máy, bảo hành, giao trả và email ưu tiên được cụ thể hóa từ checklist góp ý tổng hợp thông 
+tin phỏng vấn do nhóm cung cấp. Những mốc hoặc phạm vi chưa rõ được giữ riêng ở 
+OPEN02–OPEN04 trước khi chốt SRS; không tự coi là chính sách đã được xác nhận đầy 
+đủ. 
+3.1. Vai trò của việc Xác định yêu cầu đối với dự án phần mềm 
+Bài toán ở Chương 1 cho thấy khó khăn của trung tâm tập trung vào ba vấn đề: thiếu 
+thông tin tổng hợp về thiết bị đang xử lý, phải liên hệ thủ công để kiểm tra tiến độ và thiếu 
+thông tin kế thừa khi thay đổi kỹ thuật viên. Nếu các vấn đề này chỉ được chuyển thành tên 
+chức năng như “quản lý bảo hành” hoặc “quản lý sửa chữa”, nhóm phát triển chưa có đủ 
+cơ sở để xác định dữ liệu, quyền hạn và kết quả cần cung cấp cho người dùng. 
+Xác định yêu cầu có vai trò làm rõ những công việc mà phần mềm phải hỗ trợ trong 
+từng tình huống. Với tiếp nhận, cần biết ai ghi hồ sơ, thông tin nào bắt buộc và một phiếu 
+đại diện cho đối tượng nào. Với sửa chữa, cần biết ai được cập nhật, cập nhật những gì và 
+lịch sử được giữ lại ra sao. Với bàn giao, cần biết thông tin nào được chuyển và thời điểm 
+người mới bắt đầu chịu trách nhiệm. Các câu trả lời này tạo ra một cách hiểu thống nhất 
+giữa người dùng, người phân tích, người thiết kế và người kiểm thử. 
+Yêu cầu cũng giúp phân định phạm vi của ba tác nhân. Admin thực hiện tiếp nhận, 
+điều phối, quản lý kho và giám sát; Kỹ thuật viên thực hiện công việc kỹ thuật trên phiếu 
+được giao; Khách hàng tra cứu tiến độ trong phạm vi được xác minh. Việc gộp tiếp nhận 
+và quản lý kho vào Admin là lựa chọn phạm vi của đề tài, cần được sử dụng nhất quán 
+trong các chương và trong phân quyền phần mềm. 
+Kết quả xác định yêu cầu là đầu vào của thiết kế kiến trúc, dữ liệu và giao diện ở 
+Chương 4. Chẳng hạn, yêu cầu kế thừa công việc giữa kỹ thuật viên dẫn tới nhu cầu lưu 
+nhật ký, lịch sử phân công và hồ sơ bàn giao. Đó là ba khái niệm có liên quan nhưng không 
+
+
+=== PAGE 2 ===
+ 
+ 
+2 
+thể thay thế nhau: nhật ký ghi việc đã làm, phân công ghi người chịu trách nhiệm, còn bàn 
+giao ghi nội dung và kết quả chuyển trách nhiệm. 
+Yêu cầu còn là căn cứ lập ca kiểm thử theo các độ đo T01–T13 ở Chương 2. Theo 
+mô hình tăng dần, nhóm triển khai dữ liệu nền tảng trước, sau đó hoàn thiện các chức năng 
+phụ thuộc ở INC2–INC3. 
+3.2. Phương pháp đánh giá chất lượng của yêu cầu 
+Nhóm lựa chọn Peer Review, tức rà soát chéo giữa các thành viên, làm phương pháp 
+đánh giá chất lượng yêu cầu. Người soạn chuẩn bị bản đặc tả và mô hình liên quan; người 
+rà soát khác với người soạn đọc độc lập, ghi nhận vấn đề và kiểm tra lại sau khi sửa. Bảng 
+kiểm được dùng làm công cụ thống nhất nội dung rà soát. 
+Đối tượng rà soát bao gồm cả văn bản và sơ đồ. Một câu yêu cầu rõ ràng vẫn có thể 
+mâu thuẫn với quyền của tác nhân, kịch bản hoặc trạng thái trên hình. Vì vậy, người rà soát 
+phải đi theo chuỗi: vấn đề nghiệp vụ → yêu cầu → Use Case → kịch bản → Activity/State 
+Machine, và kiểm tra khả năng xây dựng ca kiểm thử cho kết quả đã mô tả. 
+Bảng 3.1. Tiêu chí dùng trong Peer Review 
+Mã 
+Tiêu chí 
+Nội dung kiểm tra 
+PR01 
+Đúng nhu cầu 
+Có thể chỉ ra nhu cầu hoặc nguồn nghiệp vụ hình thành yêu cầu; 
+giả định chưa xác nhận được đánh dấu. 
+PR02 
+Rõ ràng 
+Chủ thể, hành vi, thuật ngữ, điều kiện và kết quả được hiểu thống 
+nhất. 
+PR03 
+Đủ thông tin 
+Có dữ liệu cần thiết, luồng chính, ngoại lệ và kết quả; không bỏ 
+qua các nhánh quan trọng. 
+PR04 
+Nhất quán 
+Tên tác nhân, đối tượng, quyền hạn và chuyển trạng thái khớp giữa 
+văn bản và hình. 
+PR05 
+Có trọng tâm 
+Mỗi yêu cầu tập trung vào một khả năng hoặc một thuộc tính chất 
+lượng; phân biệt mục tiêu sử dụng với bước xử lý. 
+PR06 
+Khả thi 
+Yêu cầu phù hợp phạm vi, nguồn lực và phụ thuộc giữa INC1–
+INC3. 
+PR07 
+Kiểm chứng 
+được 
+Có điều kiện kiểm tra và kết quả mong đợi đủ rõ để phán định 
+đúng/sai. 
+PR08 
+Truy vết được 
+Có mã duy nhất; liên kết tới nhu cầu, Use Case hoặc độ đo, và tiếp 
+tục tới ca kiểm thử. 
+
+
+=== PAGE 3 ===
+ 
+ 
+3 
+ 
+Bảng kiểm được điều chỉnh cho bài toán bảo hành. Các tiêu chí đánh giá chất lượng 
+cách đặc tả; các độ đo T01–T13 ở Chương 2 được dùng để đánh giá phần mềm khi đã xây 
+dựng. Hai loại kết quả này được ghi nhận riêng. 
+Cách tổ chức rà soát 
+Trước buổi rà soát, người soạn cung cấp phiên bản yêu cầu, bảng thuật ngữ, sơ đồ và 
+các căn cứ nghiệp vụ. Người rà soát đọc trước, ghi vấn đề theo mã yêu cầu hoặc mã Use 
+Case và chỉ rõ đoạn văn, bước kịch bản hoặc quan hệ trên hình có liên quan. Ví dụ, nếu kỹ 
+thuật viên đã bàn giao vẫn cập nhật được phiếu, vấn đề phải được đối chiếu đồng thời với 
+quy tắc phân công, FR_AUTH_03, FR_REP_06 và Activity bàn giao. 
+Trong buổi rà soát, các thành viên lần lượt kiểm tra tác nhân và phạm vi, các đối 
+tượng và dữ liệu, luồng chính, nhánh ngoại lệ, quan hệ Use Case, vòng đời phiếu và điều 
+kiện kiểm chứng. Người soạn giải thích căn cứ; người rà soát ghi nhận kết luận. Những 
+điểm thuộc chính sách của doanh nghiệp được đưa vào danh sách cần xác nhận, không 
+được coi là đúng nghiệp vụ chỉ vì các thành viên kỹ thuật đồng ý. 
+Sau rà soát, người soạn sửa đồng thời yêu cầu và các mô hình bị ảnh hưởng. Người 
+rà soát kiểm tra lại rồi ghi kết luận Đạt, Cần chỉnh sửa hoặc Chờ xác nhận nghiệp vụ. Biên 
+bản phải ghi người tham gia, ngày thực hiện, phiên bản trước/sau và nội dung sửa thực tế. 
+Vai trò chuẩn bị, phân tích Use Case và đánh giá chất lượng yêu cầu được bố trí theo bảng 
+phân công ở Chương 1; không điền tên người đã rà soát khi hoạt động chưa diễn ra. 
+Một yêu cầu chỉ được kết luận Đạt khi các tiêu chí áp dụng đều được đáp ứng và 
+không còn vấn đề nghiêm trọng chưa xử lý. Tỷ lệ yêu cầu đạt bằng số yêu cầu Đạt chia cho 
+tổng số yêu cầu đã được rà soát, nhân 100%. Tỷ lệ này chỉ được công bố khi có biên bản 
+đầy đủ; nó không phải tỷ lệ ca kiểm thử đạt T01. 
+3.3. Danh sách các yêu cầu của hệ thống 
+Phân tích bài toán và phạm vi sử dụng 
+Đối tượng quản lý xuyên suốt là một lần tiếp nhận thiết bị để kiểm tra và xử lý bảo 
+hành. Admin cần biết thiết bị nào đã nhận, tình trạng ban đầu, người phụ trách và hạn trả. 
+Kỹ thuật viên cần biết hiện trạng, những việc đã làm, linh kiện được cấp và công việc còn 
+tồn. Khách hàng cần biết tiến độ xử lý của thiết bị mà không được tiếp cận thông tin nội 
+bộ của trung tâm hoặc hồ sơ của người khác. 
+
+
+=== PAGE 4 ===
+ 
+ 
+4 
+Từ đó, phần mềm phải giữ được mối liên hệ giữa hồ sơ ban đầu, quá trình sửa chữa 
+và kết quả bàn giao. Thay đổi người phụ trách không tạo lại hồ sơ thiết bị và không làm 
+mất nhật ký trước đó. Thay đổi tiến độ phải có dấu vết để Admin kiểm tra; dữ liệu tra cứu 
+và thống kê phải lấy từ cùng hồ sơ đang được xử lý, tránh tạo các danh sách tiến độ riêng 
+không đồng bộ. 
+Bảng 3.2. Từ vấn đề nghiệp vụ đến nhu cầu hệ thống 
+Vấn đề ở Chương 1 
+Nhu cầu cụ thể 
+Nhóm yêu cầu hình 
+thành 
+Thông tin thiết bị và tiến 
+độ phân tán 
+Có hồ sơ tiếp nhận thống nhất, mã phiếu 
+duy nhất và trạng thái hiện hành. 
+TKT; REP; T03, T07 
+Phải hỏi trực tiếp kỹ thuật 
+viên để biết tiến độ 
+Cho phép người phụ trách cập nhật, 
+Admin theo dõi và khách hàng tra cứu có 
+giới hạn. 
+REP; PORTAL; T05, 
+T06 
+Người mới khó kế thừa 
+công việc đã thực hiện 
+Lưu nhật ký, việc còn tồn và lịch sử 
+chuyển trách nhiệm. 
+REP; AUTH; T07 
+Khó nhận biết phiếu sắp 
+đến hạn hoặc chậm trả 
+Lưu hạn trả, phân loại thời hạn và tổng 
+hợp cảnh báo. 
+SLA; T04, T09 
+Cần kiểm soát linh kiện và 
+khối lượng công việc 
+Liên kết cấp linh kiện với phiếu; thống 
+kê từ dữ liệu xử lý. 
+INV; DASH; T10–
+T13 
+ 
+Phạm vi gồm tiếp nhận, kiểm tra điều kiện bảo hành, điều phối và sửa chữa, kho linh 
+kiện, cảnh báo thời hạn, tra cứu và báo cáo. Các nghiệp vụ bán hàng, thanh toán trực tuyến, 
+kế toán và điều phối nhiều chi nhánh không được mở rộng trong phiên bản này. INC1 tạo 
+dữ liệu nền tảng và quyền truy cập; INC2 thực hiện sửa chữa, bàn giao, thời hạn; INC3 
+phục vụ tra cứu và thống kê trên dữ liệu đã hình thành. 
+Bảng 3.3. Ba tác nhân của hệ thống 
+Tác nhân 
+Mục tiêu và phạm vi tương tác 
+Admin 
+Tiếp nhận thiết bị; xác nhận kết quả kiểm tra bảo hành; phân công và điều 
+chuyển kỹ thuật viên; quản lý tài khoản, linh kiện và hạn trả; trả thiết bị; 
+xem thống kê và xuất báo cáo. 
+Kỹ thuật viên 
+Xem các phiếu được giao và hồ sơ bàn giao chỉ định cho mình; ghi nhận 
+kiểm tra, sửa chữa, tiến độ và linh kiện thực tế dùng. Chỉ được cập nhật kỹ 
+thuật khi đang phụ trách. 
+
+
+=== PAGE 5 ===
+ 
+ 
+5 
+Tác nhân 
+Mục tiêu và phạm vi tương tác 
+Khách hàng 
+Tra cứu tiến độ của phiếu bằng thông tin xác minh được cấp. Không có 
+quyền cập nhật hồ sơ, xem nhật ký nội bộ hoặc thông tin phiếu khác. 
+ 
+Admin là vai trò, có thể có nhiều tài khoản. Hai cá nhân bàn giao và tiếp nhận vẫn 
+thuộc cùng một tác nhân Kỹ thuật viên. Khách hàng không bắt buộc có tài khoản trong 
+phạm vi tra cứu hiện tại. Mã phân hệ AUTH được bổ sung cho xác thực và tài khoản; cấu 
+trúc mã FR_[Module]_[Number] vẫn theo Chương 2. 
+Thuật ngữ và các đối tượng nghiệp vụ 
+Việc nhận diện danh từ và động từ giúp tách dữ liệu cần quản lý khỏi hành động sử 
+dụng hệ thống. Các danh từ chính gồm khách hàng, thiết bị, phiếu bảo hành, kỹ thuật viên, 
+phân công, nhật ký, bàn giao và linh kiện. Các động từ chính gồm tiếp nhận, kiểm tra, phân 
+công, cập nhật, cấp phát, bàn giao và tra cứu. Từ các khái niệm này, nhóm xác định thông 
+tin và quan hệ cần có trước khi thiết kế bảng dữ liệu ở Chương 4. 
+Bảng 3.4. Khái niệm và thông tin cần quản lý 
+Khái niệm 
+Ý nghĩa và thông tin chính 
+Quan hệ nghiệp vụ 
+Khách hàng 
+Người liên hệ trong một lần tiếp nhận; 
+mã, họ tên, số liên hệ và thông tin nhận 
+trả cần thiết. 
+Một khách hàng có thể có nhiều 
+phiếu; mỗi phiếu ghi rõ người liên 
+hệ của lần đó. 
+Thiết bị 
+Vật được nhận để kiểm tra; mã nội bộ, 
+loại/dòng máy, nhãn hiệu, số serial nếu 
+có. 
+Thiết bị gốc có thể quay lại nhiều 
+lần; khi đổi 1–1, liên kết máy thay 
+thế với máy gốc và phiếu, giữ 
+nguyên lịch sử nhận máy. 
+Phiếu bảo hành 
+Một lần tiếp nhận một thiết bị; mã, lỗi 
+báo, hiện trạng, phụ kiện; hình thức lấy 
+trong ngày/giữ máy 3–7 ngày, ngày 
+hẹn cụ thể; linh kiện có chữ ký, xác 
+nhận giao nhận và trạng thái. 
+Gắn một khách hàng, một thiết bị; 
+liên kết các lần phân công, nhật ký 
+và linh kiện. 
+Kiểm tra bảo 
+hành 
+Căn cứ, ngày mua/thời điểm lỗi, tình 
+trạng còn hạn, nguyên nhân lỗi, kết 
+luận điều kiện; phương án đổi 1–1/sửa 
+miễn phí/sửa có phí và xác nhận của 
+khách. 
+Gắn với phiếu; chưa đủ căn cứ thì 
+chưa được tự kết luận đủ điều kiện. 
+
+
+=== PAGE 6 ===
+ 
+ 
+6 
+Khái niệm 
+Ý nghĩa và thông tin chính 
+Quan hệ nghiệp vụ 
+Phân công 
+Ghi người chịu trách nhiệm và khoảng 
+thời gian phụ trách. 
+Một phiếu có nhiều lần phân công 
+theo lịch sử, tối đa một người phụ 
+trách hiện hành. 
+Nhật ký sửa 
+chữa 
+Một lần ghi nhận kết quả kiểm tra/thao 
+tác, thời điểm, người ghi và công việc 
+còn tồn. 
+Một phiếu có nhiều nhật ký; người 
+mới phải đọc được những ghi nhận 
+trước đó. 
+Bàn giao công 
+việc 
+Yêu cầu đổi phụ trách do Admin khởi 
+tạo; người cũ/mới, lý do, thông tin 
+vắng mặt, dữ liệu còn thiếu; nội dung 
+kế thừa, phiên gửi và kết quả chấp 
+nhận/từ chối/hủy. 
+Tham chiếu cùng phiếu và các 
+thông tin sửa chữa; không tạo một 
+phiếu bảo hành mới. 
+Linh kiện 
+Vật tư dùng để sửa; mã, tên, đơn vị và 
+ngưỡng tồn. 
+Có các giao dịch nhập/xuất; lượng 
+cấp cho một phiếu được đối chiếu 
+với lượng thực tế dùng. 
+Giao dịch kho 
+Một lần nhập hoặc xuất được xác nhận, 
+gồm linh kiện, số lượng, thời điểm và 
+người thực hiện. 
+Xuất phục vụ sửa chữa gắn với 
+phiếu; nhật ký sử dụng không tự trừ 
+tồn thêm lần nữa. 
+Cảnh báo và 
+báo cáo 
+Thông tin suy ra từ hồ sơ và ngày hẹn; 
+email 08:00 gồm Nhóm 1 Báo động đỏ 
+và Nhóm 2 Cần lưu ý; lý do ưu tiên và 
+kết quả gửi được lưu để đối chiếu. 
+Quá hạn là dấu hiệu theo thời gian; 
+Dashboard tổng hợp cùng dữ liệu 
+nguồn theo bộ lọc. 
+ 
+Phân biệt “một thiết bị” với “một lần tiếp nhận” giúp tránh ghi đè lịch sử khi thiết bị 
+quay lại. Trong mô hình đề xuất, mỗi lần quay lại tạo phiếu mới và liên kết tới thiết bị đã 
+có; phiếu kết thúc không được tự mở lại. Đây là quy ước đặc tả cần xác nhận trước khi 
+triển khai. Số điện thoại dùng để liên hệ không được coi là khóa duy nhất của khách hàng; 
+thiết bị không có serial được quản lý bằng mã nội bộ và thông tin nhận diện bổ sung. 
+Quy trình nghiệp vụ và các ràng buộc 
+Luồng chuẩn bắt đầu khi khách hàng giao thiết bị. Admin đối chiếu thông tin khách 
+hàng, ghi thiết bị, lỗi báo và hiện trạng rồi lập phiếu. Tiếp theo, Admin ghi kết quả kiểm 
+tra điều kiện bảo hành và xác nhận có tiếp tục xử lý hay không. Phiếu được tiếp tục sẽ được 
+phân công cho kỹ thuật viên; kết luận ngoài bảo hành không tự động đồng nghĩa với hủy 
+phiếu hoặc tự phát sinh chi phí. 
+
+
+=== PAGE 7 ===
+ 
+ 
+7 
+Kỹ thuật viên đọc hồ sơ, ghi chẩn đoán và thực hiện sửa chữa hoặc phương án đổi 1–
+1 đã được duyệt. Khi cần linh kiện, Admin xuất đúng phiếu; kỹ thuật viên ghi lượng thực 
+tế dùng. Kết quả kỹ thuật đạt mới chuyển Chờ trả. Trước khi đóng phiếu, khách đối chiếu 
+chữ ký, tem mác và chạy test; không đạt thì ghi nhận sai lệch và kiểm tra lại. Admin chỉ 
+xác nhận Đã trả khi khách đồng ý nhận máy. 
+Bảng 3.5. Quy tắc nghiệp vụ dùng chung 
+Mã 
+Nội dung và lý do áp dụng 
+BR01 
+Một phiếu ứng với một lần tiếp nhận một thiết bị; mã TKT_YYYYMMDD_x duy 
+nhất, không đổi. Thiết bị quay lại tạo phiếu mới có liên kết lịch sử. Nếu đổi 1–1, lưu 
+nhận diện/serial máy thay thế và liên kết với máy gốc; không ghi đè hồ sơ thiết bị đã 
+nhận. 
+BR02 
+Tiếp nhận phải xác định khách hàng, thiết bị, lỗi báo, hiện trạng và phụ kiện; phân 
+loại lấy trong ngày hoặc giữ máy dự kiến 3–7 ngày, đồng thời ghi ngày hẹn trả cụ thể. 
+Khi giữ máy, khách phải ký lên các linh kiện được đối chiếu; phiếu lưu danh sách 
+linh kiện có chữ ký và xác nhận giao nhận. Thiếu dữ liệu hoặc bằng chứng ký bắt 
+buộc thì chưa xác nhận tiếp nhận giữ máy. 
+BR03 
+Theo nội dung phỏng vấn được tổng hợp trong checklist: lỗi phát sinh trong khoảng 
+2–3 ngày đầu có phương án đổi 1–1; còn bảo hành và lỗi nhà sản xuất thì sửa miễn 
+phí; còn bảo hành nhưng lỗi do người dùng thì sửa có phí. Kết luận Đủ điều 
+kiện/Không đủ điều kiện/Chưa đủ thông tin được lưu riêng với phương án xử lý. Mốc 
+tính ngày và điều kiện đổi cụ thể còn cần chốt tại OPEN02; chưa đủ căn cứ thì không 
+tự duyệt đổi. 
+BR04 
+Mỗi phiếu có tối đa một kỹ thuật viên phụ trách hiện hành. Chỉ người phụ trách được 
+cập nhật nghiệp vụ kỹ thuật; Admin có quyền điều phối nhưng không được giả danh 
+người viết nhật ký. 
+BR05 
+Mỗi lần đổi trạng thái kỹ thuật phải kèm nhật ký nêu lý do/kết quả. Nhật ký vẫn có 
+thể được bổ sung khi trạng thái không đổi; lịch sử cũ phải được giữ lại. 
+BR06 
+Xuất kho phải có phiếu chưa kết thúc, số lượng dương và đủ tồn. Lượng ghi sử dụng 
+không vượt lượng đã cấp còn chưa ghi sử dụng; ghi sử dụng không giảm tồn thêm lần 
+nữa. 
+BR07 
+Admin khởi tạo bàn giao từ hồ sơ hiện có. KTV cũ bổ sung nhật ký nếu có thể; khi 
+vắng mặt, Admin ghi tình trạng vắng mặt và dùng lịch sử đã lưu, không ghi thay dưới 
+tên KTV. KTV mới chấp nhận mới đổi phụ trách và quyền; trước đó người cũ vẫn là 
+phụ trách trên hồ sơ. Từ chối phải có lý do; bổ sung thì gửi lại theo phiên mới, hủy 
+chỉ kết thúc yêu cầu bàn giao. Mỗi phiếu có tối đa một phiên bàn giao đang chờ. 
+
+
+=== PAGE 8 ===
+ 
+ 
+8 
+Mã 
+Nội dung và lý do áp dụng 
+BR08 
+Ghi hình thức lấy trong ngày hoặc giữ máy dự kiến 3–7 ngày cùng ngày hẹn trả cụ 
+thể. Email 08:00 chia hai nhóm: Nhóm 1 (Báo động đỏ) gồm máy chưa hoàn tất hẹn 
+hôm nay/quá hạn hoặc đang Chờ linh kiện; Nhóm 2 (Cần lưu ý) gồm máy chưa hoàn 
+tất hẹn ngày mai và chưa thuộc Nhóm 1. Không lặp phiếu giữa nhóm; loại Đã trả/Đã 
+hủy, Chờ trả được theo dõi riêng. Cách đếm 3–7 ngày và phạm vi máy Chờ linh kiện 
+cần xác nhận tại OPEN04; không tự dừng hạn khi chờ linh kiện. 
+BR09 
+Chuyển trạng thái theo Hình 3.7. Đổi 1–1 được duyệt đi từ Đang kiểm tra sang Chờ 
+kiểm tra kết quả để kiểm tra máy đổi. Chờ trả cần kết quả đạt. Trước giao trả, khách 
+đối chiếu chữ ký linh kiện, tem mác và chạy test; chưa đạt thì ghi sai lệch, kiểm tra 
+lại và chưa đóng phiếu. Đã trả cần Admin lưu xác nhận khách nhận máy. Chỉ hủy 
+trước sửa ở Đã tiếp nhận/Chờ phân công, có lý do và ghi nhận trả lại thiết bị. Phiếu 
+kết thúc không nhận cập nhật sửa chữa. 
+BR10 
+Tra cứu khách hàng phải xác minh quyền xem phiếu; chỉ công khai tiến độ, hạn trả và 
+thông tin thiết bị đã giới hạn. Nhật ký nội bộ và dữ liệu phiếu khác không được công 
+khai. 
+ 
+Các quy tắc tiếp nhận và bảo hành dưới đây bổ sung dữ liệu từ checklist phỏng vấn: 
+lấy trong ngày hoặc giữ máy dự kiến 3–7 ngày, ký lên linh kiện khi giữ máy, ba phương 
+án xử lý bảo hành và hai nhóm email 08:00. Chúng được chuyển thành yêu cầu có điều 
+kiện kiểm tra. Mốc đổi “2–3 ngày”, cách đếm “3–7 ngày” và phạm vi ưu tiên máy Chờ linh 
+kiện còn cần chốt ở mục 3.4. Các quy ước mô hình khác vẫn phải được đối chiếu nghiệp 
+vụ trước nghiệm thu. 
+Các luồng hỗ trợ và giới hạn dữ liệu 
+Với kho linh kiện, Admin xác nhận giao dịch nhập/xuất; kỹ thuật viên chỉ ghi lượng 
+dùng từ phần đã cấp cho phiếu. Thiếu tồn thì từ chối xuất và giữ số tồn. Linh kiện đã cấp 
+nhưng chưa dùng phải có phương án đối chiếu/hoàn kho được thống nhất trước khi áp dụng 
+đóng phiếu; chương này không tự giả định rằng lượng đã cấp luôn được dùng hết. 
+Với tra cứu, khách hàng cung cấp mã phiếu và thông tin xác minh theo phương án 
+được chốt. Nếu xác minh hợp lệ, hệ thống trả tiến độ, hạn trả và thông tin công khai của 
+đúng phiếu; không trả nhật ký nội bộ. Nếu thất bại, thông báo không được làm lộ dữ liệu 
+khách hàng khác. Mã tra cứu bí mật là phương án đề xuất trong FR_PORTAL_01, cần chốt 
+cơ chế cấp và cấp lại trước triển khai. 
+Với Dashboard và báo cáo, Admin lọc theo ngày tiếp nhận, kỹ thuật viên hiện hành, 
+trạng thái và dòng máy. Các điều kiện lọc được áp dụng đồng thời. Số liệu phản ánh trạng 
+
+
+=== PAGE 9 ===
+ 
+ 
+9 
+thái hiện hành của tập phiếu được lọc; không được diễn giải thành lịch sử trạng thái tại một 
+ngày quá khứ hoặc hiệu suất cá nhân theo lịch sử. Báo cáo xuất phải ghi bộ lọc và thời 
+điểm chốt dữ liệu để đối chiếu được với số liệu nguồn. 
+Danh sách yêu cầu chức năng 
+Mỗi yêu cầu có mã duy nhất và phần tăng trưởng hoàn thiện. Các mã được giữ ổn 
+định để truy vết sang thiết kế và kiểm thử; mô tả được đối chiếu với những quy tắc ở trên. 
+Các tham chiếu BR trong bảng được hiểu theo bảng quy tắc của phiên bản này. TKT_05 
+được đặc tả ở INC1, nhưng luồng trả thiết bị đầy đủ cần kiểm thử tích hợp sau khi có các 
+trạng thái sửa chữa ở INC2. 
+Bảng 3.6. Danh sách yêu cầu chức năng 
+Mã 
+Hành vi và điều kiện chấp nhận 
+Phần 
+FR_AUTH_01 
+Hệ thống phải xác thực tài khoản Admin và Kỹ thuật viên; từ chối 
+thông tin đăng nhập sai hoặc tài khoản bị khóa và cho phép kết 
+thúc phiên đăng nhập. 
+INC1 
+FR_AUTH_02 
+Hệ thống phải cho phép Admin tạo, cập nhật và khóa tài khoản 
+nội bộ, gán một trong hai vai trò Admin hoặc Kỹ thuật viên; từ 
+chối tên đăng nhập trùng. 
+INC1 
+FR_AUTH_03 
+Hệ thống phải kiểm tra quyền truy cập chức năng và phạm vi 
+phiếu trên mỗi yêu cầu; từ chối thao tác trái vai trò hoặc ngoài 
+phạm vi được giao. 
+INC1 
+FR_TKT_01 
+Hệ thống phải cho phép Admin ghi thông tin theo BR02, phân 
+loại lấy trong ngày hoặc giữ máy dự kiến 3–7 ngày và nhập ngày 
+hẹn cụ thể. Với máy giữ lại, phải ghi danh sách linh kiện khách đã 
+ký cùng xác nhận giao nhận; thiếu thông tin hoặc bằng chứng ký 
+thì chưa xác nhận tiếp nhận giữ máy, chỉ rõ nội dung cần bổ sung. 
+INC1 
+FR_TKT_02 
+Hệ thống phải tự cấp mã phiếu duy nhất theo BR01 khi tạo thành 
+công; các yêu cầu tạo đồng thời không được nhận cùng mã. 
+INC1 
+FR_TKT_03 
+Hệ thống phải cho phép Admin tìm phiếu theo mã, thông tin liên 
+hệ hoặc số nhận diện thiết bị; hiển thị đúng các phiếu khớp điều 
+kiện. 
+INC1 
+FR_TKT_04 
+Hệ thống phải hiển thị lịch sử trạng thái của phiếu theo thời gian, 
+gồm trạng thái trước/sau, người cập nhật, thời điểm và lý do nếu 
+có. 
+INC1 
+
+
+=== PAGE 10 ===
+ 
+ 
+10 
+Mã 
+Hành vi và điều kiện chấp nhận 
+Phần 
+FR_TKT_05 
+Hệ thống phải yêu cầu ghi kết quả khách đối chiếu chữ ký linh 
+kiện, tem mác và chạy test trước khi giao trả. Chỉ khi đạt và khách 
+xác nhận nhận máy, Admin mới đóng phiếu từ Chờ trả sang Đã 
+trả; lưu người, thời điểm và bằng chứng xác nhận. Chưa đạt thì 
+ghi sai lệch và chuyển kiểm tra lại, không đóng phiếu. Hủy trước 
+sửa theo BR09 phải lưu lý do và việc trả lại thiết bị. 
+INC1 
+FR_WAR_01 
+Hệ thống phải cho Admin ghi ngày mua/căn cứ bảo hành, thời 
+điểm phát sinh lỗi, tình trạng còn hạn và nguyên nhân lỗi (nhà sản 
+xuất/người dùng/chưa rõ). Lưu riêng kết luận điều kiện và phương 
+án theo BR03: đổi 1–1 theo mốc 2–3 ngày cần chốt, sửa miễn phí 
+hoặc sửa có phí; thiếu căn cứ thì ghi Chưa đủ thông tin và không 
+tự duyệt đổi. 
+INC1 
+FR_WAR_02 
+Hệ thống phải yêu cầu Admin đối chiếu căn cứ, ghi phương án xử 
+lý đã trao đổi với khách và xác nhận tiếp tục trước khi chuyển 
+Chờ phân công. Sửa có phí phải có xác nhận của khách; đổi 1–1 
+phải có căn cứ chính sách được duyệt. Thiếu căn cứ hoặc chưa 
+được khách đồng ý thì giữ Đã tiếp nhận; không tự phát sinh thu 
+phí. Khi thực hiện đổi máy, phải lưu nhận diện/serial máy thay thế 
+và liên kết máy gốc trước khi chuyển kiểm tra kết quả. 
+INC1 
+FR_REP_01 
+Hệ thống phải cho phép Admin phân công một kỹ thuật viên có 
+tài khoản hoạt động cho phiếu Chờ phân công; lưu người phụ 
+trách và thời điểm giao. 
+INC2 
+FR_REP_02 
+Hệ thống phải cho phép kỹ thuật viên xem danh sách phiếu mình 
+phụ trách và chi tiết cần thiết, gồm hiện trạng, lịch sử và hạn trả. 
+INC2 
+FR_REP_03 
+Hệ thống phải cho phép kỹ thuật viên phụ trách đổi trạng thái theo 
+Hình 3.7 kèm nhật ký của lần đổi; chuyển sai quy tắc hoặc thiếu 
+nội dung bắt buộc phải bị từ chối và giữ dữ liệu cũ. 
+INC2 
+FR_REP_04 
+Hệ thống phải cho phép kỹ thuật viên phụ trách bổ sung nhật ký 
+gồm kết quả kiểm tra, thao tác đã làm và việc còn tồn; tự lưu 
+người ghi và thời điểm. 
+INC2 
+FR_REP_05 
+Hệ thống phải cho Admin khởi tạo bàn giao bằng hồ sơ hiện có 
+theo BR07, kể cả khi KTV cũ vắng mặt; lưu lý do và phần thông 
+tin còn thiếu. Cho phép bổ sung rồi gửi lại theo phiên mới hoặc 
+hủy yêu cầu; giữ lịch sử các phiên và không tạo hai phiên đang 
+chờ. Hủy bàn giao không hủy phiếu bảo hành hay đổi người phụ 
+trách. 
+INC2 
+
+
+=== PAGE 11 ===
+ 
+ 
+11 
+Mã 
+Hành vi và điều kiện chấp nhận 
+Phần 
+FR_REP_06 
+Hệ thống phải cho KTV được chỉ định đọc hồ sơ rồi chấp nhận 
+hoặc từ chối; từ chối bắt buộc ghi lý do. Khi chấp nhận, phải kiểm 
+tra lại phiên dữ liệu, đổi phụ trách, chuyển quyền và lưu lịch sử 
+nhất quán, giữ nguyên trạng thái kỹ thuật. Khi chưa chấp nhận 
+hoặc từ chối, không đổi phụ trách; phiên gửi lại phải được xem 
+xét lại. 
+INC2 
+FR_REP_07 
+Hệ thống phải cho phép kỹ thuật viên phụ trách ghi linh kiện thực 
+tế dùng gắn với lần ghi nhật ký; từ chối vượt lượng đã cấp còn 
+chưa ghi sử dụng và không giảm tồn kho lần nữa. 
+INC2 
+FR_INV_01 
+Hệ thống phải cho phép Admin quản lý mã, tên, đơn vị tính và 
+ngưỡng tồn của linh kiện; từ chối mã trùng hoặc ngưỡng âm. 
+INC1 
+FR_INV_02 
+Hệ thống phải cho phép Admin ghi nhận nhập kho với số lượng 
+dương, thời điểm và chứng từ/tham chiếu; cập nhật tăng tồn đúng 
+một lần khi xác nhận. 
+INC1 
+FR_INV_03 
+Hệ thống phải cho phép Admin xuất linh kiện cho phiếu theo 
+BR06; thiếu tồn hoặc phiếu đã kết thúc thì từ chối và giữ nguyên 
+số tồn. 
+INC1 
+FR_INV_04 
+Hệ thống phải cho phép Admin tra cứu tồn và lịch sử nhập/xuất 
+theo linh kiện, thời gian hoặc mã phiếu; kết quả phải phản ánh các 
+giao dịch đã xác nhận. 
+INC1 
+FR_INV_05 
+Hệ thống phải đánh dấu linh kiện có tồn nhỏ hơn ngưỡng đã cấu 
+hình trên màn hình kho; khi tồn trở lại ngưỡng hoặc cao hơn thì 
+bỏ đánh dấu. 
+INC1 
+FR_SLA_01 
+Hệ thống phải lưu hình thức lấy trong ngày/giữ máy dự kiến 3–7 
+ngày và ngày hẹn trả cụ thể do Admin xác nhận; không tự chọn 
+mốc 3 hoặc 7 ngày khi chưa có quy tắc chốt. Đổi ngày hẹn phải 
+lưu giá trị trước/sau, người sửa, thời điểm và lý do. Cách đếm 
+ngày còn cần xác nhận tại OPEN04. 
+INC2 
+FR_SLA_02 
+Hệ thống phải phân nhóm theo BR08 tại thời điểm lập email: 
+Nhóm 1 gồm máy chưa hoàn tất hẹn hôm nay/quá hạn hoặc đang 
+Chờ linh kiện; Nhóm 2 gồm máy chưa hoàn tất hẹn ngày mai, trừ 
+phiếu đã ở Nhóm 1. Chưa hoàn tất là các trạng thái trước Chờ trả; 
+loại Đã trả/Đã hủy, không lặp phiếu. Phạm vi Chờ linh kiện là 
+cách hiểu từ checklist cần chốt ở OPEN04. 
+INC2 
+
+
+=== PAGE 12 ===
+ 
+ 
+12 
+Mã 
+Hành vi và điều kiện chấp nhận 
+Phần 
+FR_SLA_03 
+Hệ thống phải gửi email điểm tin 08:00 theo giờ vận hành cho 
+Admin, tách rõ Nhóm 1 (Báo động đỏ) và Nhóm 2 (Cần lưu ý). 
+Mỗi dòng có mã phiếu, thiết bị, KTV phụ trách nếu có, ngày hẹn, 
+trạng thái và lý do ưu tiên. Lưu thời điểm lập, kết quả gửi; danh 
+sách theo đúng FR_SLA_02 và không làm đổi trạng thái phiếu. 
+INC2 
+FR_PORTAL_0
+1 
+Hệ thống phải cho phép khách hàng tra cứu bằng mã phiếu và mã 
+tra cứu bí mật được cấp khi tiếp nhận; chỉ trả kết quả khi cả hai 
+thông tin hợp lệ. 
+INC3 
+FR_PORTAL_0
+2 
+Hệ thống phải giới hạn kết quả công khai ở mã phiếu, thiết bị đã 
+lược bỏ thông tin nhạy cảm, tiến độ và hạn trả; không công khai 
+nhật ký nội bộ hoặc dữ liệu phiếu khác. 
+INC3 
+FR_DASH_01 
+Hệ thống phải tổng hợp số phiếu theo trạng thái, số quá hạn và 
+phân bố công việc kỹ thuật viên; số liệu phải khớp tập phiếu 
+nguồn và bộ lọc đang áp dụng. 
+INC3 
+FR_DASH_02 
+Hệ thống phải cho phép Admin lọc thống kê theo khoảng ngày 
+tiếp nhận, kỹ thuật viên hiện hành, trạng thái và dòng máy; các bộ 
+lọc được kết hợp theo điều kiện đồng thời. 
+INC3 
+FR_DASH_03 
+Hệ thống phải cho phép Admin xuất báo cáo Excel hoặc PDF từ 
+bộ lọc hiện hành; tệp phải ghi thời điểm xuất, điều kiện lọc và số 
+liệu khớp Dashboard tại cùng thời điểm chốt dữ liệu. 
+INC3 
+ 
+Danh sách yêu cầu phi chức năng 
+Các yêu cầu phi chức năng kế thừa mục tiêu ở Chương 2 và nêu điều kiện kiểm chứng 
+tương ứng. Hiệu năng phải gắn với thao tác, quy mô dữ liệu và môi trường đo; bảo mật 
+phải được kiểm tra cả ở phía xử lý. Những tham số còn thiếu được giữ trong danh sách cần 
+xác nhận, không tự coi là đạt. 
+Bảng 3.7. Danh sách yêu cầu phi chức năng 
+Mã 
+Yêu cầu và điều kiện kiểm chứng 
+Liên kết 
+NFR_PERF_01 
+Các thao tác tạo phiếu, tra cứu và cập nhật phải phản hồi 
+dưới 3 giây trong điều kiện đo đã chốt; ghi rõ số mẫu và thời 
+gian từng thao tác. Tải đồng thời và cấu hình môi trường là 
+điều kiện cần xác nhận trước đo. 
+T05 
+
+
+=== PAGE 13 ===
+ 
+ 
+13 
+Mã 
+Yêu cầu và điều kiện kiểm chứng 
+Liên kết 
+NFR_PERF_02 
+Với 5.000 phiếu, thời gian tải biểu đồ không quá 2 giây và 
+xuất báo cáo không quá 3 giây; đo từ thao tác người dùng 
+đến khi nhận đủ kết quả. Cấu hình máy và tải đồng thời phải 
+cố định trong biên bản. 
+T12 
+NFR_SEC_01 
+100% yêu cầu trái quyền trong bộ kiểm thử phải bị từ chối ở 
+phía xử lý, kể cả khi gọi trực tiếp API; không chỉ ẩn nút trên 
+giao diện. 
+T06 
+NFR_SEC_02 
+Mật khẩu và mã tra cứu bí mật phải được lưu bằng cơ chế 
+băm phù hợp; không xuất vào log hay báo cáo. Tra cứu thất 
+bại không được tiết lộ dữ liệu phiếu; ngưỡng chống thử hàng 
+loạt phải được cấu hình và kiểm thử. 
+T06 
+NFR_REL_01 
+Tạo phiếu, xuất kho, đổi trạng thái và xác nhận bàn giao phải 
+nhất quán: lỗi giữa chừng không để dữ liệu cập nhật một 
+phần; cập nhật đồng thời phải phát hiện xung đột thay vì ghi 
+đè im lặng. 
+T03, T07, 
+T10 
+NFR_REL_02 
+Tỷ lệ gửi email được dịch vụ tiếp nhận phải đạt ít nhất 95% 
+trên các lần gửi hợp lệ được thử; trạng thái tiếp nhận không 
+được diễn giải là chắc chắn đã tới hộp thư người dùng. 
+T09 
+NFR_AUD_01 
+Các sự kiện quan trọng phải ghi người thực hiện, thời gian, 
+đối tượng và kết quả; log không chứa mật khẩu hoặc mã tra 
+cứu bí mật; lịch sử thay đổi phải xem được theo phiếu. 
+T03, T07 
+NFR_USAB_01 
+Tỷ lệ hoàn thành đúng tác vụ trong UAT phải lớn hơn 90%; 
+kịch bản, người tham gia và điều kiện trợ giúp phải được xác 
+định trước khi đo. 
+T08 
+NFR_COMP_01 
+Dashboard phải dùng được trên Desktop và Mobile, nội 
+dung báo cáo in/xuất PDF không bị cắt ở khổ A4. Kích 
+thước màn hình, trình duyệt và danh sách màn hình kiểm tra 
+phải được chốt trong kế hoạch kiểm thử. 
+T13 
+NFR_TEST_01 
+Dữ liệu kiểm thử phải bao phủ ba tác nhân, mọi trạng thái, 
+thiếu tồn; máy lấy trong ngày/giữ 3–7 ngày, thiếu chữ ký, ba 
+phương án bảo hành, bàn giao khi KTV cũ vắng mặt và 
+khách không chấp nhận giao trả. Giữ bộ 5.000 phiếu để kiểm 
+thử Dashboard; có lệnh nạp và khôi phục dữ liệu mẫu. 
+TB.01, 
+TB.11 
+
+
+=== PAGE 14 ===
+ 
+ 
+14 
+Mã 
+Yêu cầu và điều kiện kiểm chứng 
+Liên kết 
+NFR_TEST_02 
+Đồng hồ và dịch vụ email phải giả lập được; có điểm kích 
+hoạt 08:00 trong môi trường kiểm thử. Dữ liệu bao phủ hẹn 
+hôm nay, quá hạn, ngày mai, chờ linh kiện, trùng điều kiện 
+và phiếu kết thúc để đối chiếu hai nhóm ưu tiên. Không mở 
+chức năng giả lập cho người dùng vận hành. 
+TB.02, 
+TB.05 
+NFR_TEST_03 
+API phải có phản hồi thống nhất và mã HTTP phù hợp; phần 
+tử giao diện quan trọng có định danh ổn định; logic thống kê 
+kiểm thử được độc lập với biểu đồ. 
+TB.03, 
+TB.07, 
+TB.12 
+NFR_TEST_04 
+Môi trường kiểm thử phải dựng lại được bằng Docker, tách 
+dữ liệu thật; mã nguồn kiểm thử có Git tag; duy trì ma trận 
+yêu cầu–ca kiểm thử và kiểm thử hồi quy khi thay đổi. 
+TB.08–
+TB.10 
+ 
+T01 là tỷ lệ ca kiểm thử chức năng đạt khi thực thi, còn Peer Review đánh giá chất 
+lượng đặc tả. T02 liên kết nhóm WAR, T03 liên kết TKT, T04 liên kết SLA, T07 liên kết 
+REP và lịch sử, T10 liên kết INV, T11 liên kết DASH. Đề nghị thống nhất các cách viết 
+ngưỡng T01 và T09 trong Chương 2 thành ít nhất 95% theo bảng độ đo 2.3 trước khi chốt 
+tiêu chí nghiệm thu. 
+Xác định Use Case và phạm vi của các sơ đồ 
+Từ các động từ nghiệp vụ, nhóm gom những thao tác phục vụ một mục tiêu sử dụng 
+thành Use Case. Chẳng hạn, tiếp nhận không chỉ là nhập một dòng dữ liệu: Admin phải 
+xác định đúng khách hàng, ghi đúng thiết bị và có một phiếu để theo dõi lần xử lý. Tương 
+tự, cập nhật trạng thái cần giữ được căn cứ của thay đổi; điều chuyển cần có hồ sơ để người 
+mới tiếp tục công việc. 
+Bảng 3.8. Danh sách 12 Use Case và liên kết yêu cầu 
+Mã 
+Mục tiêu sử dụng 
+Tác nhân 
+Mã FR liên quan 
+UC01 Đăng nhập 
+Admin, Kỹ 
+thuật viên 
+AUTH_01 
+UC02 Quản lý tài khoản 
+Admin 
+AUTH_02 
+UC03 Tiếp nhận và quản lý phiếu bảo hành 
+Admin 
+TKT_01–05; WAR_01–02 
+UC04 Kiểm tra điều kiện bảo hành 
+Admin 
+WAR_01–02 
+UC05 Phân công kỹ thuật viên 
+Admin 
+REP_01 
+
+
+=== PAGE 15 ===
+ 
+ 
+15 
+Mã 
+Mục tiêu sử dụng 
+Tác nhân 
+Mã FR liên quan 
+UC06 Bàn giao công việc 
+Admin, Kỹ 
+thuật viên 
+REP_05–06 
+UC07 Cập nhật quá trình sửa chữa 
+Kỹ thuật viên 
+REP_02–04; TKT_04 
+UC08 Ghi nhận linh kiện sử dụng 
+Kỹ thuật viên 
+REP_07 
+UC09 Quản lý kho linh kiện 
+Admin 
+INV_01–05 
+UC10 Theo dõi và tra cứu bảo hành 
+Admin, Khách 
+hàng 
+SLA_01–03; PORTAL_01–
+02 
+UC11 Xem thống kê 
+Admin 
+DASH_01–02 
+UC12 Xuất báo cáo 
+Admin 
+DASH_03 
+ 
+Các mã FR ở cột cuối được hiểu có tiền tố FR_. FR_AUTH_03 áp dụng xuyên suốt 
+cho các chức năng nội bộ. Bảng 3.8 liệt kê đúng 12 Use Case; Hình 3.1 thể hiện đủ 12 Use 
+Case này, mỗi tên tương ứng một oval. Các hình chi tiết chỉ sử dụng lại những Use Case 
+trong danh sách, không bổ sung Use Case mới. Mã UC dùng để truy vết trong văn bản và 
+không hiển thị trên hình. 
+Quan hệ giữa các Use Case 
+Bảng 3.9. Quan hệ thống nhất giữa các Use Case 
+Nguồn Quan hệ Đích 
+Điều kiện và ý nghĩa 
+UC03 
+include 
+UC04 
+Trong luồng tiếp nhận mới, luôn kiểm tra và lưu kết luận bảo 
+hành; không biểu diễn thứ tự bằng include. 
+UC06 
+extend 
+UC05 
+Khi thay kỹ thuật viên đang phụ trách, phát sinh bàn giao; chỉ 
+định lần đầu không cần bàn giao. 
+UC08 
+extend 
+UC07 
+Tại bước ghi nội dung xử lý, có sử dụng linh kiện thì ghi nhận 
+lượng thực tế dùng. 
+UC12 
+extend 
+UC11 
+Tại bước xem kết quả thống kê, Admin chọn xuất tệp. 
+ 
+
+
+=== PAGE 16 ===
+ 
+ 
+16 
+Các quan hệ ở bảng trên được dùng nhất quán ở Hình 3.1 và các hình chi tiết. Nhật 
+ký, xác minh tra cứu và lập phiếu là bước xử lý trong kịch bản; không tạo mã Use Case 
+phụ. Các yêu cầu chức năng vẫn được giữ đầy đủ dù nhiều thao tác thuộc cùng một Use 
+Case. 
+Hình 3.1 thể hiện đầy đủ 12 Use Case của hệ thống, thống nhất với Bảng 3.8. Admin 
+thực hiện các chức năng quản trị, tiếp nhận, điều phối, kho, theo dõi và báo cáo; Kỹ thuật 
+viên đăng nhập, nhận bàn giao và cập nhật sửa chữa; Khách hàng tra cứu trong phạm vi 
+được xác minh. Hình có một include và ba extend. Các thao tác lập phiếu, tra cứu hồ sơ, 
+ghi nhật ký, xác minh thông tin và trả thiết bị được mô tả trong các luồng của Use Case 
+tương ứng. 
+ 
+Hình 3.1. Use Case tổng quát của hệ thống 
+
+
+=== PAGE 17 ===
+ 
+ 
+17 
+Phân tích nghiệp vụ tiếp nhận thiết bị 
+Mục tiêu của Admin là tạo hồ sơ đủ tin cậy để những người xử lý sau nhận đúng thiết 
+bị và hiểu đúng tình trạng ban đầu. Dữ liệu đầu vào không chỉ có lỗi khách hàng mô tả mà 
+còn gồm dấu hiệu nhận diện, hiện trạng và phụ kiện đi kèm. Kết quả cần có là mã phiếu, 
+mối liên kết khách hàng–thiết bị và trạng thái Đã tiếp nhận; kết luận bảo hành được thực 
+hiện ở bước nghiệp vụ tiếp theo. 
+UC03 Tiếp nhận và quản lý phiếu bảo hành có các luồng tiếp nhận mới, tra cứu hồ 
+sơ và trả thiết bị. Luồng tiếp nhận mới bao gồm UC04 Kiểm tra điều kiện bảo hành bằng 
+quan hệ include; các luồng tra cứu hoặc trả thiết bị có thể sử dụng kết luận đã lưu, không 
+bắt buộc kiểm tra lại. Lập phiếu là một bước trong UC03. Admin chọn lại khách hàng hoặc 
+thiết bị đã có, tránh tạo hồ sơ trùng. Kịch bản dưới đây đặc tả luồng tiếp nhận mới; Activity 
+làm rõ trình tự của toàn bộ vòng đời. 
+Hình 3.2 sử dụng đúng UC03 và UC04 từ danh sách chung. Quan hệ include được 
+thực hiện trong luồng tiếp nhận mới của UC03 để ghi nhận căn cứ và kết luận bảo hành 
+theo FR_WAR_01–02. Tra cứu hồ sơ và trả thiết bị là các luồng khác của UC03, được mô 
+tả sau kịch bản tiếp nhận; không có oval Lập phiếu tiếp nhận riêng. 
+ 
+Hình 3.2. Use Case chi tiết tiếp nhận thiết bị 
+Luồng thay thế của tiếp nhận: dữ liệu trùng phải được Admin đối chiếu; thiết bị không 
+có serial dùng mã nội bộ. Thiếu chữ ký bắt buộc thì chưa xác nhận giữ máy. Chưa rõ 
+nguyên nhân lỗi, mốc đổi hoặc chứng từ thì lưu Chưa đủ thông tin, không tự duyệt đổi/thu 
+
+
+=== PAGE 18 ===
+ 
+ 
+18 
+phí. Khách chưa đồng ý sửa có phí thì chưa chuyển Chờ phân công. Lỗi lưu không tạo 
+phiếu dở dang hoặc sinh thêm phiếu khi gửi lại cùng yêu cầu. 
+Bảng 3.10. Đặc tả luồng tiếp nhận mới trong UC03 
+Thuộc tính 
+Nội dung 
+Tác nhân / kích 
+hoạt 
+Admin; bắt đầu khi khách hàng giao thiết bị và Admin chọn tiếp nhận mới, 
+sau đó đối chiếu điều kiện bảo hành. 
+Tiền điều kiện 
+Admin đã đăng nhập và có quyền tiếp nhận; thông tin giao nhận thiết bị có 
+thể được đối chiếu. 
+Dữ liệu vào 
+Khách hàng, thiết bị, serial nếu có; lỗi báo, hiện trạng, phụ kiện; hình thức 
+lấy trong ngày/giữ 3–7 ngày, ngày hẹn; linh kiện đã ký và xác nhận giao 
+nhận; căn cứ bảo hành, phương án và ý kiến khách. 
+Kết quả thành 
+công 
+Có phiếu duy nhất, hình thức nhận máy, ngày hẹn và bằng chứng ký khi 
+giữ máy; kết luận và phương án xử lý được lưu. Đủ căn cứ và khách đồng 
+ý mới chuyển Chờ phân công; chưa đủ thì giữ Đã tiếp nhận. 
+Kết quả khi thất 
+bại 
+Không có phiếu hợp lệ được tạo một phần; dữ liệu đã nhập được phản hồi 
+để sửa hoặc thử lại. 
+Truy vết 
+FR_TKT_01–02, FR_WAR_01–02, FR_AUTH_03; UC04. 
+ 
+Bảng 3.11. Kịch bản tiếp nhận mới trong UC03 
+Bước Admin thực hiện 
+Hệ thống phản hồi 
+1 
+Chọn tiếp nhận mới. 
+Hiển thị thông tin cần ghi nhận. 
+2 
+Tìm/chọn hoặc ghi khách hàng mới. 
+Đối chiếu thông tin liên hệ; hạn chế tạo hồ sơ 
+trùng. 
+3 
+Chọn thiết bị đã có hoặc ghi thiết bị 
+mới, lỗi báo, hiện trạng và phụ kiện. 
+Liên kết đúng hồ sơ và lịch sử; kiểm tra 
+trường bắt buộc. 
+4 
+Phân loại lấy trong ngày hoặc giữ máy 
+dự kiến 3–7 ngày; thống nhất ngày 
+hẹn cụ thể. 
+Lưu hình thức tiếp nhận và ngày hẹn; không tự 
+chọn ngày khi quy tắc còn thiếu. 
+5 
+Nếu giữ máy, để khách ký lên các linh 
+kiện cần đối chiếu; ghi danh sách và 
+xác nhận giao nhận. 
+Thiếu bằng chứng ký bắt buộc thì chưa xác 
+nhận tiếp nhận giữ máy. 
+
+
+=== PAGE 19 ===
+ 
+ 
+19 
+Bước Admin thực hiện 
+Hệ thống phản hồi 
+6 
+Kiểm tra lại và xác nhận lập phiếu. 
+Cấp mã TKT_YYYYMMDD_x, lưu phiếu và 
+lịch sử khởi tạo nhất quán. 
+7 
+Cung cấp thông tin phiếu và cách tra 
+cứu cho khách. 
+Hiển thị mã phiếu, ngày hẹn và thông tin tra 
+cứu theo phương án đã chốt. 
+8 
+Đối chiếu ngày mua, thời điểm lỗi, 
+thời hạn bảo hành và nguyên nhân lỗi 
+qua UC04. 
+Lưu kết luận điều kiện cùng căn cứ; đánh dấu 
+thiếu thông tin nếu chưa xác định được. 
+9 
+Trao đổi phương án đổi 1–1, sửa miễn 
+phí hoặc sửa có phí với khách. 
+Lưu phương án và xác nhận; chưa đủ điều 
+kiện đổi hoặc chưa đồng ý phí thì không tự 
+duyệt. 
+10 
+Xác nhận tiếp tục xử lý. 
+Đủ căn cứ và được đồng ý thì chuyển Chờ 
+phân công; còn thiếu thì giữ Đã tiếp nhận. 
+ 
+Các luồng khác của UC03 
+Tra cứu hồ sơ: Admin nhập mã phiếu, thông tin khách hàng hoặc thiết bị; hệ thống 
+lọc kết quả, Admin chọn đúng hồ sơ rồi xem thông tin và lịch sử theo quyền. Không có kết 
+quả thì thông báo để đổi điều kiện; thao tác đọc không tự sửa dữ liệu. Luồng này truy vết 
+FR_TKT_03–04. 
+Trả thiết bị và đóng phiếu: Admin mở phiếu Chờ trả; khách đối chiếu chữ ký trên linh 
+kiện, tem mác và chạy test. Nếu đạt và khách đồng ý nhận máy, Admin lưu xác nhận, người 
+giao, thời điểm rồi chuyển Đã trả. Sai lệch hoặc test không đạt phải được ghi nhận, chuyển 
+kiểm tra lại và chưa đóng phiếu. Sai trạng thái hoặc dữ liệu đã đổi thì từ chối xác nhận. 
+Hủy trước sửa theo BR09 cần lý do và ghi nhận trả lại thiết bị. Luồng này truy vết 
+FR_TKT_05 và Hình 3.7. 
+Phân tích nghiệp vụ cập nhật quá trình sửa chữa 
+Mục tiêu của kỹ thuật viên là ghi được công việc thực tế và làm cho tiến độ phản ánh 
+đúng trạng thái thiết bị. Một thay đổi từ Đang sửa chữa sang Chờ linh kiện cần có nguyên 
+nhân; một thay đổi sang Chờ kiểm tra kết quả cần có nội dung đã hoàn tất. Chỉ lưu tên 
+trạng thái sẽ không đủ để Admin trả lời khách hàng hoặc người mới tiếp tục sửa chữa. 
+UC07 Cập nhật quá trình sửa chữa bao quát xem công việc được giao, ghi nhật ký và 
+cập nhật trạng thái. Ghi nhật ký là bước bắt buộc khi đổi trạng thái theo BR05, không phải 
+Use Case riêng. Luồng chỉ bổ sung nhật ký không làm đổi trạng thái. UC08 Ghi nhận linh 
+
+
+=== PAGE 20 ===
+ 
+ 
+20 
+kiện sử dụng mở rộng UC07 tại điểm ghi nội dung xử lý nếu có dùng linh kiện; lượng dùng 
+được đối chiếu với lượng Admin đã cấp qua UC09 và không làm giảm tồn lần thứ hai. 
+Hình 3.3 dùng UC07 và UC08 đúng như Bảng 3.8. Mũi tên extend đi từ Ghi nhận 
+linh kiện sử dụng đến Cập nhật quá trình sửa chữa. Nếu không dùng linh kiện, kỹ thuật 
+viên vẫn có thể hoàn thành việc cập nhật với nhật ký hợp lệ. 
+ 
+Hình 3.3. Use Case chi tiết cập nhật sửa chữa 
+Bảng 3.12. Đặc tả UC07 Cập nhật quá trình sửa chữa 
+Thuộc tính 
+Nội dung 
+Tác nhân / kích 
+hoạt 
+Kỹ thuật viên; chọn cập nhật sau một lần kiểm tra hoặc xử lý thiết bị. 
+Tiền điều kiện 
+Đã đăng nhập; đang phụ trách phiếu; phiếu chưa Đã trả hoặc Đã hủy. 
+Dữ liệu vào 
+Trạng thái đích; kết quả, thao tác đã làm, việc còn tồn; linh kiện thực tế 
+dùng nếu có. 
+Kết quả thành 
+công 
+Trạng thái, nhật ký và lượng sử dụng liên quan được ghi nhận nhất quán; 
+có người thực hiện và thời điểm. 
+Kết quả khi thất 
+bại 
+Giữ nguyên dữ liệu hiện hành; không lưu trạng thái mới khi nhật ký hoặc 
+lượng sử dụng không hợp lệ. 
+Truy vết 
+FR_REP_02–04, FR_REP_07, FR_TKT_04, FR_AUTH_03; 
+NFR_REL_01. 
+
+
+=== PAGE 21 ===
+ 
+ 
+21 
+ 
+Bảng 3.13. Kịch bản chính của UC07 
+Bước Kỹ thuật viên thực hiện 
+Hệ thống phản hồi 
+1 
+Mở phiếu trong danh sách được giao. 
+Hiển thị hồ sơ, phụ trách, trạng thái, hạn trả và 
+lịch sử. 
+2 
+Chọn trạng thái đích. 
+Đối chiếu chuyển trạng thái hợp lệ theo Hình 
+3.7. 
+3 
+Ghi nội dung xử lý, kết quả và việc 
+còn tồn. 
+Kiểm tra nội dung nhật ký bắt buộc của lần xử 
+lý trong UC07. 
+4 
+Nếu có, ghi linh kiện đã dùng trong 
+lần xử lý. 
+Thực hiện phần mở rộng UC08 khi có dùng 
+linh kiện; đối chiếu lượng đã cấp chưa ghi sử 
+dụng. 
+5 
+Xác nhận lưu. 
+Kiểm tra lại quyền phụ trách và phiên bản dữ 
+liệu; lưu trạng thái, lịch sử và nhật ký trong 
+cùng lần xử lý. 
+6 
+Xem kết quả. 
+Hiển thị tiến độ mới; dữ liệu tra cứu và 
+Dashboard đọc cùng hồ sơ đã cập nhật. 
+ 
+Luồng thay thế và ngoại lệ của UC07: kỹ thuật viên có thể chỉ bổ sung nhật ký mà 
+không đổi trạng thái. Chuyển trạng thái sai, thiếu nhật ký hoặc dùng vượt lượng được cấp 
+phải bị từ chối. Khi người phụ trách hoặc dữ liệu đã đổi, hệ thống báo xung đột và yêu cầu 
+đọc lại. Kiểm tra kết quả không đạt đưa phiếu về Đang sửa chữa; đạt mới đưa sang Chờ 
+trả. 
+Phân tích nghiệp vụ điều chuyển và bàn giao công việc 
+Điều chuyển giải quyết việc thay đổi người chịu trách nhiệm; bàn giao giải quyết khả 
+năng tiếp tục công việc. Nếu chỉ thay tên kỹ thuật viên, phần mềm chưa giải quyết vấn đề 
+thiếu thông tin kế thừa ở Chương 1. Hồ sơ bàn giao phải chỉ rõ thiết bị đang ở đâu trong 
+quá trình xử lý, đã kiểm tra gì, kết quả gì, đã dùng linh kiện nào và còn phải làm gì. 
+UC05 Phân công kỹ thuật viên có hai tình huống: chỉ định người lần đầu và thay 
+người đang phụ trách. Khi chỉ định lần đầu cho phiếu Chờ phân công, hệ thống lưu người 
+phụ trách và lịch sử theo FR_REP_01. Khi thay người đang phụ trách, UC06 Bàn giao 
+công việc mở rộng UC05 tại điểm xác nhận thay người. Admin gửi yêu cầu; kỹ thuật viên 
+mới đọc hồ sơ rồi chấp nhận hoặc từ chối. Chỉ sau khi chấp nhận mới đổi người phụ trách. 
+
+
+=== PAGE 22 ===
+ 
+ 
+22 
+Activity ở Hình 3.6 mô tả quá trình này; phần mở rộng có thể diễn ra qua nhiều phiên làm 
+việc. 
+Người được chỉ định tiếp nhận có quyền đọc hồ sơ bàn giao đang chờ để đưa ra quyết 
+định; quyền đọc này không đồng nghĩa với quyền cập nhật sửa chữa. Chỉ khi xác nhận 
+thành công, người mới mới có quyền cập nhật với tư cách phụ trách. Sự phân biệt này phải 
+được áp dụng ở phía xử lý, kể cả khi truy cập trực tiếp API. 
+Bảng 3.14. Đặc tả UC06 Điều chuyển và bàn giao 
+Thuộc tính 
+Nội dung 
+Tác nhân / kích 
+hoạt 
+Admin khởi tạo điều chuyển. KTV cũ bổ sung nếu có thể; KTV mới đọc 
+hồ sơ và quyết định tiếp nhận. Việc khởi tạo không phụ thuộc thao tác của 
+KTV cũ. 
+Tiền điều kiện 
+Phiếu có người phụ trách, chưa kết thúc; người nhận hoạt động, khác người 
+cũ và chưa có yêu cầu bàn giao đang chờ. 
+Dữ liệu vào 
+Phiếu; người cũ/mới; lý do; lịch sử và việc còn tồn; thông tin KTV cũ vắng 
+mặt nếu có, dữ liệu còn thiếu và phiên hồ sơ gửi xem xét. 
+Kết quả thành 
+công 
+Người mới trở thành phụ trách duy nhất; người cũ mất quyền cập nhật; lịch 
+sử và nội dung bàn giao vẫn được giữ. 
+Kết quả khi chưa 
+nhận / thất bại 
+Yêu cầu còn chờ hoặc bị từ chối/hủy; người cũ vẫn chịu trách nhiệm; trạng 
+thái kỹ thuật không tự đổi. 
+Truy vết 
+FR_REP_04–06, FR_AUTH_03, NFR_REL_01; BR04, BR07. 
+ 
+Bảng 3.15. Kịch bản chính của UC06 
+Bước Chủ thể và hành động 
+Kết quả cần có 
+1 
+Admin chọn phiếu, KTV tiếp nhận và lý do. Hệ thống kiểm tra quyền, trạng thái, 
+người nhận và yêu cầu đang chờ. 
+2 
+Hệ thống nạp lịch sử và hồ sơ hiện có. 
+Hiển thị việc đã làm, kết quả và phần 
+còn thiếu để Admin rà soát. 
+3 
+Admin xác định KTV cũ có thể bổ sung 
+không. Có thì KTV cũ cập nhật bằng tài 
+khoản của mình; không thì Admin ghi tình 
+trạng vắng mặt. 
+Giữ đúng tác giả nhật ký; không bắt 
+buộc KTV cũ thao tác để khởi tạo bàn 
+giao. 
+
+
+=== PAGE 23 ===
+ 
+ 
+23 
+Bước Chủ thể và hành động 
+Kết quả cần có 
+4 
+Admin hoàn thiện hồ sơ và gửi yêu cầu. 
+Lưu phiên đang chờ; người cũ vẫn là 
+phụ trách trên hồ sơ. 
+5 
+KTV mới đọc lịch sử và nội dung bàn giao. 
+Có đủ thông tin xem xét; quyền đọc 
+chưa đồng nghĩa quyền cập nhật sửa 
+chữa. 
+6 
+KTV mới xác nhận tiếp nhận. 
+Kiểm tra lại phiên dữ liệu và điều kiện; 
+hồ sơ lỗi thời phải đọc lại. 
+7 
+Hệ thống đổi phụ trách, chuyển quyền và 
+lưu lịch sử. 
+Các thay đổi cùng có hiệu lực; trạng thái 
+kỹ thuật của phiếu giữ nguyên. 
+8 
+KTV mới tiếp tục xử lý qua UC07. 
+Nhật ký mới thuộc người mới; lịch sử 
+của người trước được giữ. 
+ 
+Luồng thay thế của UC06: KTV mới từ chối phải ghi lý do. Admin chọn Bổ sung 
+hoặc Hủy. Bổ sung cập nhật hồ sơ, tạo phiên gửi lại và quay về bước gửi yêu cầu để KTV 
+mới xem xét lại; giữ lịch sử phiên cũ. Hủy chỉ kết thúc yêu cầu bàn giao, không hủy phiếu 
+bảo hành hay đổi người phụ trách. Khi KTV cũ vắng mặt, Admin ghi tình trạng và phần 
+thông tin thiếu, dùng lịch sử đã lưu; không ghi nhật ký dưới tên người khác. Phiếu kết thúc, 
+người nhận bị khóa hoặc phiên dữ liệu lỗi thời đều phải bị từ chối tiếp nhận. 
+
+
+=== PAGE 24 ===
+ 
+ 
+24 
+Phân tích nghiệp vụ tra cứu và báo cáo 
+Hình 3.4 dùng UC10, UC11 và UC12 trong danh sách chung. Admin theo dõi ngày 
+hẹn, Nhóm 1 Báo động đỏ và Nhóm 2 Cần lưu ý theo BR08; Khách hàng xác minh rồi chỉ 
+xem tiến độ phiếu được phép. Email 08:00 ưu tiên Nhóm 1, không lặp phiếu ở Nhóm 2. 
+UC12 mở rộng UC11 khi Admin chọn xuất tệp; cơ chế xác minh và phân nhóm không tạo 
+thêm Use Case. 
+ 
+Hình 3.4. Use Case chi tiết tra cứu và báo cáo 
+
+
+=== PAGE 25 ===
+ 
+ 
+25 
+Hình 3.5 mô tả từ phân loại tiếp nhận, ghi chữ ký khi giữ máy, chọn phương án bảo 
+hành đến giao trả. Khách kiểm tra chữ ký, tem và chạy test trước khi Admin đóng phiếu; 
+không đạt thì ghi sai lệch và quay lại kiểm tra. Làn Hệ thống thể hiện xử lý tự động, không 
+bổ sung tác nhân thứ tư. Ngoài bảo hành không đồng nghĩa tự động hủy. 
+ 
+Hình 3.5. Activity quy trình bảo hành tổng thể 
+
+
+=== PAGE 26 ===
+ 
+ 
+26 
+Hình 3.6 hiện thực UC06 với điểm bắt đầu ở Admin. KTV cũ bổ sung nếu có thể; 
+nhánh vắng mặt sử dụng lịch sử hiện có. Sau từ chối, Bổ sung quay lại hoàn thiện và gửi 
+hồ sơ; Hủy kết thúc yêu cầu bàn giao. Chỉ nhánh chấp nhận mới đổi phụ trách, quyền và 
+lịch sử nhất quán; trạng thái kỹ thuật giữ nguyên. 
+ 
+Hình 3.6. Activity điều chuyển và bàn giao công việc 
+
+
+=== PAGE 27 ===
+ 
+ 
+27 
+Hình 3.7 bổ sung nhánh đổi 1–1 đã được duyệt từ Đang kiểm tra sang Chờ kiểm tra 
+kết quả và nhánh khách báo không đạt từ Chờ trả quay lại kiểm tra. Chỉ đóng phiếu khi 
+khách xác nhận nhận máy. Chờ linh kiện là trạng thái nghiệp vụ; ưu tiên email và bàn giao 
+đang chờ là dấu hiệu theo dõi độc lập. 
+ 
+Hình 3.7. State Machine vòng đời phiếu bảo hành 
+
+
+=== PAGE 28 ===
+ 
+ 
+28 
+Bảng 3.16. Đối chiếu sự kiện và điều kiện chuyển trạng thái 
+Chuyển trạng thái 
+Sự kiện, điều kiện và tác nhân 
+Đã tiếp nhận → Chờ phân công 
+Admin đã ghi kết luận bảo hành và xác nhận tiếp tục 
+xử lý. Chưa đủ thông tin thì giữ Đã tiếp nhận. 
+Chờ phân công → Đang kiểm tra 
+Admin phân công thành công một kỹ thuật viên hoạt 
+động; lưu lịch sử phân công. 
+Đang kiểm tra → Đang sửa chữa 
+KTV phụ trách ghi chẩn đoán và phương án; có nhật 
+ký cho lần đổi trạng thái. 
+Đang sửa chữa ↔ Chờ linh kiện 
+KTV ghi lý do thiếu; tiếp tục khi đủ linh kiện cần thiết 
+hoặc phương án thay thế được xác nhận. 
+Đang sửa chữa → Chờ kiểm tra kết 
+quả 
+KTV ghi công việc đã hoàn tất và đề nghị kiểm tra. 
+Chờ kiểm tra kết quả → Đang sửa 
+chữa / Chờ trả 
+Không đạt thì ghi lỗi còn tồn và sửa lại; đạt thì ghi kết 
+quả và chuyển Chờ trả. 
+Chờ trả → Đã trả 
+Khách kiểm tra lại chữ ký linh kiện, tem mác, chạy 
+test và xác nhận nhận máy. Admin lưu kết quả, bằng 
+chứng và thời điểm rồi mới đóng phiếu. 
+Đã tiếp nhận / Chờ phân công → Đã 
+hủy 
+Admin xác nhận không tiếp tục, ghi lý do và việc trả 
+lại thiết bị. Hủy sau khi bắt đầu sửa nằm ngoài 
+phương án hiện tại. 
+Đang kiểm tra → Chờ kiểm tra kết 
+quả 
+Phương án đổi 1–1 đã được duyệt theo BR03; ghi 
+thiết bị thay thế và nhật ký, kiểm tra máy đổi trước 
+khi chuyển Chờ trả. 
+Chờ trả → Chờ kiểm tra kết quả 
+Khách phát hiện sai lệch hoặc test không đạt; Admin 
+ghi nhận và yêu cầu kiểm tra lại. Chưa đóng phiếu; 
+kiểm tra không đạt thì sửa lại, đạt mới quay về Chờ 
+trả. 
+ 
+
+
+=== PAGE 29 ===
+ 
+ 
+29 
+3.4. Kết quả đánh giá chất lượng các yêu cầu 
+Bảng 3.17. Kết quả đối chiếu và chỉnh sửa đặc tả 
+Điểm được rà soát 
+Nội dung đã làm rõ 
+Trạng thái 
+Đối tượng quản lý chưa 
+tách thiết bị với lần tiếp 
+nhận 
+Đề xuất một thiết bị có nhiều phiếu theo các 
+lần quay lại; mỗi phiếu gắn một thiết bị. 
+Đã đặc tả; chờ xác 
+nhận quy ước 
+Thiếu cơ sở suy dẫn 
+chức năng 
+Liên kết vấn đề Chương 1 với nhu cầu và nhóm 
+TKT, REP, SLA, INV, PORTAL, DASH. 
+Đã bổ sung đối 
+chiếu 
+Use Case chi tiết chủ 
+yếu lặp danh sách chức 
+năng 
+Thống nhất 12 Use Case trong bảng, hình tổng 
+quát, các hình chi tiết và kịch bản; phân biệt 
+các bước nội bộ với hành vi được tách thành 
+Use Case. 
+Đã bổ sung mô 
+hình và giải thích 
+Đổi trạng thái chưa gắn 
+chặt nhật ký 
+BR05, FR_REP_03 và UC07 cùng yêu cầu 
+nhật ký khi đổi trạng thái; luồng chỉ bổ sung 
+nhật ký không làm đổi trạng thái. 
+Đã thống nhất 
+trong đặc tả 
+Ghi sử dụng dễ nhầm 
+với xuất kho 
+UC08 chỉ ghi lượng dùng từ phần đã cấp; 
+UC09 ghi giao dịch xuất kho do Admin xác 
+nhận. 
+Đã làm rõ điều 
+kiện và ngoại lệ 
+Chưa rõ mốc đổi trách 
+nhiệm khi bàn giao 
+Admin khởi tạo kể cả khi KTV cũ vắng mặt; từ 
+chối phải lưu lý do; bổ sung quay lại gửi phiên 
+mới, hủy chỉ kết thúc bàn giao. Chấp nhận mới 
+đổi phụ trách. 
+Đã thống nhất mô 
+hình; chờ nghiệp 
+vụ 
+Nhầm quá hạn với trạng 
+thái sửa chữa 
+Tách dấu hiệu thời hạn khỏi State Machine; 
+phiếu kết thúc bị loại khỏi cảnh báo. 
+Đã thống nhất 
+trong đặc tả 
+Phân quyền và dữ liệu 
+công khai chưa tách rõ 
+Giới hạn cập nhật theo phụ trách; giới hạn kết 
+quả khách hàng; yêu cầu xác minh được đánh 
+dấu cần chốt. 
+Đã đặc tả phạm 
+vi; còn tham số 
+mở 
+Chính sách bảo hành còn 
+chung chung 
+Bổ sung ba phương án theo checklist phỏng 
+vấn; tách kết luận điều kiện khỏi phương án, 
+ghi căn cứ và xác nhận khách. 
+Đã cụ thể hóa; 
+OPEN02 chốt 
+mốc đổi 
+Tiếp nhận và trả máy 
+thiếu đối chiếu thực tế 
+Ghi lấy trong ngày/giữ 3–7 ngày, chữ ký linh 
+kiện; khách đối chiếu tem, chữ ký và chạy test 
+trước khi đóng phiếu. 
+Đã đồng bộ 
+BR02, BR09, 
+TKT và kịch bản 
+
+
+=== PAGE 30 ===
+ 
+ 
+30 
+Điểm được rà soát 
+Nội dung đã làm rõ 
+Trạng thái 
+Email cảnh báo chưa có 
+nhóm ưu tiên rõ 
+Tách Báo động đỏ/Cần lưu ý tại 08:00, ưu tiên 
+nhóm cao hơn và loại trùng; nêu rõ cách hiểu 
+về Chờ linh kiện. 
+Đã đặc tả; 
+OPEN04 chốt 
+phạm vi 
+Tham chiếu quy tắc trả 
+máy bị nhầm 
+Sửa BR06 thành BR09 trong luồng trả thiết bị; 
+BR06 tiếp tục chỉ dùng cho kho. 
+Đã sửa tham 
+chiếu và mở rộng 
+BR09 
+ 
+Các chỉnh sửa theo checklist được đối chiếu giữa BR02–03, BR07–09, bảng yêu cầu, 
+kịch bản và ba biểu đồ quy trình/trạng thái. Các thông tin đã cụ thể hóa không thay cho 
+biên bản Peer Review có người rà soát và kết luận thực tế. Chưa ghi tên người tham gia, 
+ngày rà soát hoặc tỷ lệ đạt khi chưa có bằng chứng; OPEN02–OPEN04 phải được chốt để 
+kiểm thử chính sách chính xác. 
+Bảng 3.18. Nội dung cần xác nhận trước khi chốt yêu cầu 
+Mã 
+Nội dung cần chốt 
+Ảnh hưởng 
+OPEN01 
+Một phiếu–một thiết bị, xử lý thiết bị quay lại và 
+nhận diện thiết bị không có serial. 
+Khái niệm, UC03, TKT và 
+mô hình dữ liệu. 
+OPEN02 
+Mốc đổi 1–1 “2–3 ngày”: tính từ sự kiện nào, 
+ngưỡng chính xác và loại lỗi được đổi; căn cứ 
+chứng từ, ngoại lệ và xác nhận phương án sửa có 
+phí. 
+BR03; WAR; nhánh tiếp 
+tục/hủy. 
+OPEN03 
+Phê duyệt phần hồ sơ còn thiếu khi KTV cũ vắng 
+mặt; giới hạn hủy trước sửa; đối chiếu/hoàn linh 
+kiện chưa dùng khi kết thúc. Nhánh bổ sung/hủy 
+bàn giao đã được tách rõ. 
+BR06–07, BR09; REP, INV 
+và Activity/State Machine. 
+OPEN04 
+“3–7 ngày” là ngày lịch hay ngày làm việc; cách 
+đặt ngày hẹn. Xác nhận việc đưa mọi máy Chờ 
+linh kiện vào Nhóm 1 hay chỉ máy đến/sắp đến 
+hạn; xử lý đổi ngày hẹn. Giờ email là 08:00 theo 
+giờ vận hành. 
+SLA, T04/T09 và kiểm thử 
+thời gian. 
+OPEN05 
+Cấp/cấp lại mã tra cứu, giới hạn thử sai và nội 
+dung công khai. 
+PORTAL, bảo mật và UC10. 
+
+
+=== PAGE 31 ===
+ 
+ 
+31 
+Mã 
+Nội dung cần chốt 
+Ảnh hưởng 
+OPEN06 
+Tải đồng thời, cấu hình đo, số mẫu; trình 
+duyệt/màn hình và nhóm UAT. 
+NFR_PERF, NFR_COMP, 
+NFR_USAB và 
+T05/T08/T12/T13. 
+OPEN07 
+Ý nghĩa chỉ số, mẫu báo cáo và thời điểm chốt dữ 
+liệu. 
+DASH, T11/T12 và việc diễn 
+giải báo cáo. 
+OPEN08 
+Đồng bộ ba tác nhân, AUTH và các ngưỡng 
+T01/T09 ở Chương 1–2; gắn căn cứ khảo sát có 
+thật. 
+Tính nhất quán toàn báo cáo 
+và truy vết nghiệp vụ. 
+ 
+ 
+
+

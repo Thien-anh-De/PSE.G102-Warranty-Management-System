@@ -1,0 +1,51 @@
+from enum import Enum
+
+class UserRole(str, Enum):
+    ADMIN = "ADMIN"
+    TECHNICIAN = "TECHNICIAN"
+
+class TicketStatus(str, Enum):
+    RECEIVED = "RECEIVED"
+    PENDING_ASSIGNMENT = "PENDING_ASSIGNMENT"
+    UNDER_INSPECTION = "UNDER_INSPECTION"
+    UNDER_REPAIR = "UNDER_REPAIR"
+    WAITING_FOR_PARTS = "WAITING_FOR_PARTS"
+    WAITING_FOR_RESULT_CHECK = "WAITING_FOR_RESULT_CHECK"
+    WAITING_FOR_RETURN = "WAITING_FOR_RETURN"
+    RETURNED = "RETURNED"
+    CANCELLED = "CANCELLED"
+
+class IntakeType(str, Enum):
+    SAME_DAY = "SAME_DAY"
+    HOLD_FOR_REPAIR = "HOLD_FOR_REPAIR"
+
+class WarrantyEligibility(str, Enum):
+    ELIGIBLE = "ELIGIBLE"
+    INELIGIBLE = "INELIGIBLE"
+    INSUFFICIENT_INFO = "INSUFFICIENT_INFO"
+
+class WarrantyResolution(str, Enum):
+    ONE_TO_ONE_EXCHANGE = "ONE_TO_ONE_EXCHANGE"
+    FREE_REPAIR = "FREE_REPAIR"
+    PAID_REPAIR = "PAID_REPAIR"
+    PENDING_DECISION = "PENDING_DECISION"
+
+class DefectOrigin(str, Enum):
+    MANUFACTURER = "MANUFACTURER"
+    USER_DAMAGE = "USER_DAMAGE"
+    UNCLEAR = "UNCLEAR"
+
+class HandoverStatus(str, Enum):
+    PENDING = "PENDING"
+    ACCEPTED = "ACCEPTED"
+    REJECTED = "REJECTED"
+    CANCELLED = "CANCELLED"
+
+class TransactionType(str, Enum):
+    IMPORT = "IMPORT"
+    ALLOCATE = "ALLOCATE"
+    RETURN = "RETURN"
+
+class SlaGroup(str, Enum):
+    RED_ALERT = "RED_ALERT"
+    ATTENTION = "ATTENTION"
