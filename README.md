@@ -11,7 +11,10 @@ Nhóm thực hiện: **PSE.G102**
 
 ```text
 E:\Warranty Management System\
+├── .github/workflows/ci.yml               # Tự động chạy pytest kiểm thử khi push / PR
 ├── docs/                                  # Thư mục lưu trữ tài liệu Word theo chuẩn Thông tư 30
+│   ├── images/                            # 8 hình ảnh sơ đồ kiến trúc, DFD, Sequence độ phân giải cao
+│   ├── diagrams_mermaid.md                # Mã nguồn Mermaid của các sơ đồ Chương 4
 │   ├── PSE.G102_Chuong4_KienTrucPhanMem.docx
 │   ├── PSE.G102_SAD_KienTrucHeThong.docx
 │   ├── PSE.G102_QuyTacDatTen_NamingStandard.docx
@@ -39,13 +42,20 @@ E:\Warranty Management System\
 │   ├── test_ticket_lifecycle.py
 │   └── test_warranty_policy.py
 ├── .gitignore                             # Loại trừ file rác, virtualenv, file nhạy cảm
+├── pytest.ini                             # Cấu hình pythonpath cho pytest
 ├── requirements.txt                       # Thư viện phụ thuộc
 └── README.md                              # Hướng dẫn dự án và quy chế Git
 ```
 
 ---
 
-## 2. Hướng dẫn cài đặt và chạy kiểm thử
+## 2. Hướng dẫn Clone dự án, Cài đặt và Chạy kiểm thử
+
+### Bước 0: Clone repository về máy (chỉ làm 1 lần đầu)
+```bash
+git clone -b develop https://github.com/Thien-anh-De/PSE.G102-Warranty-Management-System.git
+cd PSE.G102-Warranty-Management-System
+```
 
 ### Cài đặt môi trường
 Yêu cầu: Python >= 3.10 (khuyến nghị Python 3.12).
@@ -64,48 +74,46 @@ pytest -v
 
 ---
 
-## 3. Quy chuẩn và Quy trình Git an toàn cho nhóm (Git Workflow & Safety Rules)
+## 3. Quy chuẩn và Quy trình Git cho nhóm (Git Workflow)
 
 ### 3.1. Mô hình phân nhánh (Branching Strategy)
-- **`main`**: Nhánh chính thức, chứa mã nguồn ổn định nhất. **Nghiêm cấm push trực tiếp vào `main`**.
-- **`develop`**: Nhánh tích hợp chung của nhóm. Tất cả các tính năng hoàn thiện sẽ được merge vào đây trước.
-- **`feat/<module>-<tên_task>`**: Nhánh tính năng cá nhân (ví dụ: `feat/tkt-create`, `feat/dash-chart`, `feat/portal-search`). Mỗi thành viên khi làm task mới bắt buộc phải tạo nhánh từ `develop`.
+- **`main`**: Nhánh chính thức, lưu phiên bản ổn định để nộp bài. **Không push trực tiếp vào `main`**.
+- **`develop`**: Nhánh tích hợp chung của nhóm. Tất cả các tính năng hoàn thiện sẽ được gộp vào đây.
+- **`feat/<module>-<tên_task>`**: Nhánh tính năng cá nhân (ví dụ: `feat/tkt-create`, `feat/dash-chart`, `feat/portal-search`). Mỗi thành viên tạo nhánh mới từ `develop`.
 - **`fix/<mã_lỗi>`**: Nhánh sửa lỗi phát sinh trong quá trình kiểm thử.
 
-### 3.2. Quy trình làm việc 6 bước của từng thành viên
-1. **Lấy mã nguồn mới nhất:**
+### 3.2. Quy trình làm việc hằng ngày (Pull -> Code -> Test -> Push)
+1. **Lấy mã nguồn mới nhất trước khi làm:**
    ```bash
    git checkout develop
    git pull origin develop
    ```
-2. **Tạo nhánh tính năng mới:**
+2. **Tạo nhánh tính năng mới cho task của mình:**
    ```bash
    git checkout -b feat/tkt-create-ticket
    ```
 3. **Thực hiện viết code và kiểm thử cục bộ:**
-   - Code tuân thủ Clean Code, không đưa icon, không để comment thừa thãi.
-   - Luôn chạy lệnh kiểm thử trước khi commit:
+   - Code gọn gàng, sạch sẽ, không đưa icon hay comment thừa thãi.
+   - Chạy kiểm thử trước khi commit:
      ```bash
-     pytest
+     pytest -v
      ```
-   - Chỉ khi 100% test pass mới được commit.
-4. **Commit theo chuẩn Conventional Commits:**
-   - Cú pháp: `<loại>(<phân_hệ>): <mô tả ngắn gọn bằng tiếng Anh/Việt không dấu>`
+4. **Commit theo chuẩn gọn rõ:**
+   - Cú pháp gợi ý: `<loại>(<phân_hệ>): <mô tả ngắn gọn>`
    - Ví dụ:
      - `feat(tkt): implement hold for repair signed parts check per BR02`
      - `fix(sla): resolve 08:00 email grouping condition`
      - `test(portal): add unit test for secret code hashing verification`
      - `docs(sad): update database schema diagram`
-5. **Đẩy nhánh lên Remote:**
+5. **Đẩy nhánh lên GitHub:**
    ```bash
    git push -u origin feat/tkt-create-ticket
    ```
-6. **Tạo Pull Request (PR) và Rà soát chéo (Peer Review):**
-   - Vào GitHub/GitLab tạo Pull Request từ `feat/...` vào `develop`.
-   - Gắn ít nhất 1 thành viên khác (hoặc vai trò D&T) vào review.
-   - Chỉ được Merge khi reviewer phê duyệt và các bài test tự động đều Đạt (Pass).
+6. **Tạo Pull Request (PR) vào `develop`:**
+   - Vào GitHub bấm **Compare & pull request** để gộp từ `feat/...` vào `develop`.
+   - Sau khi test tự động (CI) báo xanh và xem nhanh không xung đột file thì bấm **Merge pull request** (nếu lỡ lỗi có thể bấm **Revert** ngay trên PR).
 
-### 3.3. Các nguyên tắc an toàn bắt buộc (Safety Checklist)
-- **Không bao giờ commit file nhạy cảm:** Mật khẩu, API key, token bí mật, file `.env`. Sử dụng file `.env.example` để chia sẻ cấu hình mẫu.
-- **Không commit file rác / build cache:** `__pycache__`, `.pytest_cache`, `.venv`, file tạm của Word (`~$...`).
-- **Luôn pull code mới nhất trước khi push:** Giúp giải quyết xung đột (conflict) ngay trên máy cá nhân thay vì gây lỗi trên repo chung.
+### 3.3. Lưu ý an toàn bắt buộc
+- **Không commit file nhạy cảm:** Mật khẩu, API key, token bí mật, file `.env`.
+- **Không commit file rác / cache:** `__pycache__/`, `.pytest_cache/`, `.venv/`, file tạm của Word (`~$...`) — đã được chặn sẵn trong `.gitignore`.
+- **Hạn chế sửa chung 1 file Word cùng lúc:** Khi ghép hoặc sửa `.docx`, nên báo nhau trước để tránh conflict file nhị phân.
