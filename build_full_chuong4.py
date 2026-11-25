@@ -17,8 +17,11 @@ from doc_content_builder import (
     add_body_p,
     add_table_caption,
     add_figure_caption,
-    add_diagram_box
+    add_diagram_box,
+    add_diagram_image
 )
+
+IMG_DIR = r'E:\Warranty Management System\docs\images'
 
 def build_chuong4_document():
     doc = create_document()
@@ -221,36 +224,7 @@ def build_chuong4_document():
         "Về mặt logic, hệ thống được cấu trúc thành 5 tầng rõ ràng, đảm bảo nguyên tắc phân tách trách nhiệm (Separation of Concerns - SoC):"
     )
 
-    add_diagram_box(doc, [
-        "+-----------------------------------------------------------------------------------+",
-        "|                             1. PRESENTATION LAYER (UI)                            |",
-        "|  - Admin Dashboard (Desktop)       - Technician Mobile Web    - Customer Tracking |",
-        "+-----------------------------------------+-----------------------------------------+",
-        "                                          | HTTPS / REST API / JSON",
-        "+-----------------------------------------v-----------------------------------------+",
-        "|                         2. APPLICATION & API ROUTING LAYER                         |",
-        "|  - Reverse Proxy (Nginx)           - Auth Middleware (JWT)    - Rate Limiter       |",
-        "|  - Input Validation (Pydantic v2)  - Exception Handlers       - Audit Logging      |",
-        "+-----------------------------------------+-----------------------------------------+",
-        "                                          | Inversion of Control / DI",
-        "+-----------------------------------------v-----------------------------------------+",
-        "|                        3. CORE DOMAIN SERVICES LAYER (BUS)                         |",
-        "|  - TicketService (BR01, BR02)      - WarrantyService (BR03)   - RepairService     |",
-        "|  - InventoryService (BR06)         - SlaEngineService (BR08)  - PortalService     |",
-        "+-----------------------------------------+-----------------------------------------+",
-        "                                          | Domain Contracts / Ports",
-        "+-----------------------------------------v-----------------------------------------+",
-        "|                     4. INFRASTRUCTURE & DATA PERSISTENCE LAYER                    |",
-        "|  - Relational Repositories (PostgreSQL 16)      - Redis Cache (Dashboard Metrics) |",
-        "|  - File Attachment Storage (Customer Signature) - Transaction Manager (ACID)      |",
-        "+-----------------------------------------+-----------------------------------------+",
-        "                                          | Interfaces",
-        "+-----------------------------------------v-----------------------------------------+",
-        "|                      5. EXTERNAL ADAPTERS & TESTABILITY LAYER                     |",
-        "|  - SystemClockAdapter (Real)  <-->  SimulatedClockAdapter (TB.02 Mock Clock)       |",
-        "|  - SmtpEmailAdapter (Real)    <-->  MockEmailAdapter (TB.05 Buffer Inspector)     |",
-        "+-----------------------------------------------------------------------------------+"
-    ])
+    add_diagram_image(doc, os.path.join(IMG_DIR, "hinh_4_1_kien_truc_phan_tang.png"), width_inches=6.45)
     add_figure_caption(doc, "Hình 4.1: Sơ đồ khối kiến trúc phân tầng logic Clean Layered Architecture")
 
     add_body_p(
@@ -268,34 +242,7 @@ def build_chuong4_document():
         "và dễ dàng thiết lập môi trường kiểm thử sạch chỉ bằng một câu lệnh duy nhất (thỏa mãn NFR_TEST_01 và tiêu chí kiểm tra TB.08)."
     )
 
-    add_diagram_box(doc, [
-        "+-----------------------------------------------------------------------------------+",
-        "|                             CLIENT DEVICES / BROWSERS                             |",
-        "|      [Admin Desktop PC]          [Technician Smartphone]      [Customer Browser]  |",
-        "+-----------------------------------------+-----------------------------------------+",
-        "                                          | Port 80/443 (HTTPS / TLS 1.3)",
-        "+-----------------------------------------v-----------------------------------------+",
-        "|                                DOCKER HOST ENGINE                                 |",
-        "|  +-----------------------------------------------------------------------------+  |",
-        "|  | Container 1: frontend-server (Nginx 1.25)                                   |  |",
-        "|  |   - Serves React/Next.js Client Application                                 |  |",
-        "|  |   - SSL Termination, Reverse Proxy to Backend API                           |  |",
-        "|  +--------------------------------------+--------------------------------------+  |",
-        "|                                         | Internal Network (Port 8000)            |",
-        "|  +--------------------------------------v--------------------------------------+  |",
-        "|  | Container 2: backend-api-service (Python 3.12 / FastAPI Async)              |  |",
-        "|  |   - Uvicorn Workers with High Concurrency Async Event Loop                  |  |",
-        "|  |   - Business Services, State Machine Engine, Clean Architecture Core        |  |",
-        "|  +-------------------+------------------+-------------------+------------------+  |",
-        "|                      |                  |                   |                     |",
-        "|  +-------------------v---+  +-----------v--------+  +-------v------------------+  |",
-        "|  | Container 3:          |  | Container 4:       |  | Container 5:             |  |",
-        "|  | db-postgres (16.2)    |  | cache-redis (7.2)  |  | mock-mailpit (SMTP test) |  |",
-        "|  | Port 5432 (Internal)  |  | Port 6379 Internal |  | Web UI Port 8025         |  |",
-        "|  | Data Volume Persistent|  | Fast Dashboard KPI |  | Mock SMTP Port 1025      |  |",
-        "|  +-----------------------+  +--------------------+  +--------------------------+  |",
-        "+-----------------------------------------------------------------------------------+"
-    ])
+    add_diagram_image(doc, os.path.join(IMG_DIR, "hinh_4_2_trien_khai_docker.png"), width_inches=6.45)
     add_figure_caption(doc, "Hình 4.2: Sơ đồ triển khai hạ tầng Container hóa với Docker Compose")
 
     add_heading_2(doc, "4.3.3. Ranh giới bảo mật và ma trận kiểm soát truy cập (RBAC Matrix)")
@@ -419,30 +366,7 @@ def build_chuong4_document():
     )
 
     add_heading_3(doc, "a) Sơ đồ luồng dữ liệu ngữ cảnh (Context DFD - Cấp 0)")
-    add_diagram_box(doc, [
-        "                 +-------------------------------------------------------+",
-        "                 |                     ADMINISTRATOR                     |",
-        "                 +-----------------------+-------^-----------------------+",
-        "             1. Thông tin tiếp nhận, ký LK|       | 6. Báo cáo SLA 08:00, Dashboard",
-        "             2. Thẩm định BH, phân công  |       | 7. Cảnh báo tồn kho, DS bàn giao",
-        "             3. Xác nhận nhập/xuất kho   |       |",
-        "                                         v       |",
-        "                               +-----------------+---------------+",
-        "                               |                                 |",
-        "   +-----------------------+   |              ( 0 )              |   +-----------------------+",
-        "   |                       |   |                                 |   |                       |",
-        "   |                       |-->|        HỆ THỐNG PHẦN MỀM        |-->|                       |",
-        "   |      KHÁCH HÀNG       |   |        QUẢN LÝ BẢO HÀNH         |   |     KỸ THUẬT VIÊN     |",
-        "   |                       |<--|        CÔNG TY HƯNG THIỆN       |<--|                       |",
-        "   |                       |   |                                 |   |                       |",
-        "   +-----------------------+   |                                 |   +-----------------------+",
-        "    4. Tra cứu tiến độ (Mã+Pass)|                                 | 8. Xem DS phiếu được giao",
-        "    5. Nhận kết quả tra cứu    +-----------------+---------------+ 9. Ghi nhật ký, đổi status",
-        "       Biên bản giao trả máy                     ^                 10. Xác nhận bàn giao",
-        "                                                 |                 11. Ghi linh kiện dùng",
-        "                                                 v",
-        "                                       [ KHO DỮ LIỆU TẬP TRUNG ]"
-    ])
+    add_diagram_image(doc, os.path.join(IMG_DIR, "hinh_4_3_dfd_cap_0.png"), width_inches=6.45)
     add_figure_caption(doc, "Hình 4.3: Sơ đồ luồng dữ liệu ngữ cảnh (Context DFD Cấp 0)")
 
     add_heading_3(doc, "b) Sơ đồ luồng dữ liệu mức 1 (DFD Cấp 1)")
@@ -451,22 +375,7 @@ def build_chuong4_document():
         "Sơ đồ DFD cấp 1 phân rã toàn bộ hệ thống bảo hành thành 5 tiến trình nghiệp vụ cốt lõi, tương ứng với vòng đời di chuyển của dữ liệu:"
     )
 
-    add_diagram_box(doc, [
-        "  [Khách hàng] ---> ( 1.0 Tiếp nhận & Thẩm định BH ) ---> [ D1: Phiếu & Thiết bị ]",
-        "                           | (BR01, BR02, BR03)                 |",
-        "                           v                                    v",
-        "  [Admin] --------> ( 2.0 Điều chuyển & Bàn giao KTV) <------- [ D2: Phân công & Bàn giao ]",
-        "                           | (BR04, BR07)                       |",
-        "                           v                                    v",
-        "  [Kỹ thuật viên]-> ( 3.0 Cập nhật Sửa chữa & Kho LK) <------> [ D3: Nhật ký & Kho LK ]",
-        "                           | (BR05, BR06)                       |",
-        "                           v                                    v",
-        "  [Admin / KTV] --> ( 4.0 Nghiệm thu Test & Trả máy ) -------> [ D4: Lịch sử Giao nhận ]",
-        "                           | (BR09)                             |",
-        "                           v                                    v",
-        "  [Admin / Batch]-> ( 5.0 Giám sát Hạn & Thống kê SLA) ------> [ D5: SlaLogs & Dashboard ]",
-        "                           (BR08, BR10)"
-    ])
+    add_diagram_image(doc, os.path.join(IMG_DIR, "hinh_4_4_dfd_cap_1.png"), width_inches=6.45)
     add_figure_caption(doc, "Hình 4.4: Sơ đồ luồng dữ liệu DFD Cấp 1 phân rã tiến trình hệ thống")
 
     add_heading_3(doc, "c) Đặc tả chi tiết các luồng dữ liệu DFD Cấp 2")
@@ -781,73 +690,19 @@ def build_chuong4_document():
     )
 
     add_heading_2(doc, "4.8.1. Kịch bản 1: Tiếp nhận thiết bị giữ máy và kiểm tra ký linh kiện (UC03 - BR02)")
-    add_diagram_box(doc, [
-        "Admin                  TicketController             TicketService              Repository",
-        "  |                           |                           |                         |",
-        "  |-- 1. Nhập hồ sơ, LK ký -->|                           |                         |",
-        "  |   (HOLD_FOR_REPAIR)       |-- 2. create_ticket() ---->|                         |",
-        "  |                           |                           |-- 3. Kiểm tra LK ký --->| (BR02 Guard)",
-        "  |                           |                           |      [Nếu rỗng: Báo lỗi]|",
-        "  |                           |                           |-- 4. Sinh mã phiếu ---->| get_next_daily_seq()",
-        "  |                           |                           |      TKT_YYYYMMDD_x     |",
-        "  |                           |                           |-- 5. Băm SHA-256 code ->|",
-        "  |                           |                           |-- 6. Lưu Ticket -------->| tickets[id] = ticket",
-        "  |                           |                           |-- 7. Lưu Log Status --->| history.append(log)",
-        "  |                           |<-- 8. Return Ticket ------|                         |",
-        "  |<-- 9. In phiếu tiếp nhận -| (Trạng thái: RECEIVED)    |                         |"
-    ])
+    add_diagram_image(doc, os.path.join(IMG_DIR, "hinh_4_5_seq_tiep_nhan.png"), width_inches=6.45)
     add_figure_caption(doc, "Hình 4.5: Biểu đồ tuần tự luồng tiếp nhận thiết bị giữ máy và ký linh kiện")
 
     add_heading_2(doc, "4.8.2. Kịch bản 2: Điều chuyển và bàn giao kỹ thuật viên khi KTV cũ vắng mặt (UC06 - BR07)")
-    add_diagram_box(doc, [
-        "Admin                 RepairService                Repository             KTV Mới (Target)",
-        "  |                          |                          |                        |",
-        "  |-- 1. initiate_handover ->|                          |                        |",
-        "  |   (is_absent=True)       |-- 2. Kiểm tra phiên chờ->| get_pending_handover() |",
-        "  |                          |      (Tối đa 1 phiên)    |                        |",
-        "  |                          |-- 3. Tạo HandoverSession>| handovers[id] = session|",
-        "  |                          |      (Status: PENDING)   |                        |",
-        "  |                          |                          |-- 4. Thông báo phiên ->|",
-        "  |                          |                          |                        |-- 5. Xem hồ sơ & nhật ký",
-        "  |                          |<-- 6. respond_handover(accept=True)---------------|",
-        "  |                          |-- 7. Đổi KTV phụ trách ->| ticket.current_tech = new",
-        "  |                          |-- 8. Ghi Audit Log ----->| ticket.history.append()|",
-        "  |                          |-- 9. Đổi Session ACCEPTED| session.status = ACCEPTED",
-        "  |<-- 10. Báo thành công ---|"
-    ])
+    add_diagram_image(doc, os.path.join(IMG_DIR, "hinh_4_6_seq_ban_giao.png"), width_inches=6.45)
     add_figure_caption(doc, "Hình 4.6: Biểu đồ tuần tự quy trình bàn giao điều chuyển KTV vắng mặt")
 
     add_heading_2(doc, "4.8.3. Kịch bản 3: Cập nhật sửa chữa và sử dụng linh kiện từ kho (UC07, UC08 - BR05, BR06)")
-    add_diagram_box(doc, [
-        "KTV Phụ trách          RepairService              InventoryService          Repository",
-        "  |                          |                           |                       |",
-        "  |-- 1. update_status ----->|                           |                       |",
-        "  |   (UNDER_REPAIR->RESULT) |-- 2. Kiểm tra FSM Guard ->|                       | (Valid State Transition)",
-        "  |                          |-- 3. Ghi RepairWorkLog -->|                       | work_logs.append()",
-        "  |                          |                           |                       |",
-        "  |-- 4. record_part_usage ->|                           |-- 5. Check allocated->| allocations[ticket_id]",
-        "  |   (part_id, used_qty)    |                           |      used <= allocated|",
-        "  |                          |                           |-- 6. Tăng used_qty -->| (KHÔNG giảm kho lần 2)",
-        "  |<-- 7. Xác nhận cập nhật -|                           |<-- 8. Return alloc ---|"
-    ])
+    add_diagram_image(doc, os.path.join(IMG_DIR, "hinh_4_7_seq_sua_chua_kho.png"), width_inches=6.45)
     add_figure_caption(doc, "Hình 4.7: Biểu đồ tuần tự cập nhật tiến độ và ghi nhận sử dụng linh kiện kho")
 
     add_heading_2(doc, "4.8.4. Kịch bản 4: Tự động tổng hợp và gửi email điểm tin SLA 08:00 (SLA - BR08)")
-    add_diagram_box(doc, [
-        "Scheduler (08:00)         SlaService                 SimulatedClock         EmailService Mock",
-        "  |                           |                             |                       |",
-        "  |-- 1. Trigger Cronjob ---->|                             |                       |",
-        "  |                           |-- 2. Lấy ngày hôm nay ----->| clock.today()         |",
-        "  |                           |   (Hỗ trợ giả lập TB.02)    |                       |",
-        "  |                           |-- 3. Quét Tickets chưa xong |                       |",
-        "  |                           |      Phân loại Nhóm 1 (Đỏ)  |                       |",
-        "  |                           |      Phân loại Nhóm 2 (Lưu ý)                       |",
-        "  |                           |      (Không trùng lặp phiếu)|                       |",
-        "  |                           |-- 4. Định dạng thân email ->|                       |",
-        "  |                           |-- 5. dispatch_email() ----------------------------->| send_email()",
-        "  |                           |                             |                       | (Lưu buffer kiểm thử TB.05)",
-        "  |<-- 6. Hoàn tất báo cáo ---|"
-    ])
+    add_diagram_image(doc, os.path.join(IMG_DIR, "hinh_4_8_seq_sla_0800.png"), width_inches=6.45)
     add_figure_caption(doc, "Hình 4.8: Biểu đồ tuần tự bộ máy tự động gửi điểm tin SLA lúc 08:00")
 
     # Conclusion of Chapter 4
