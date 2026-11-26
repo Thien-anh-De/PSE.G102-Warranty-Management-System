@@ -4,11 +4,15 @@ from src.warranty_core import (
     Customer,
     Device,
     InMemoryRepository,
+    PortalService,
     SimulatedClockService,
     TicketService,
     User,
     UserRole,
 )
+
+from src.warranty_app.config import get_config
+from src.warranty_app.portal_rate_limiter import PortalRateLimiter
 
 
 class AppContainer:
@@ -23,6 +27,12 @@ class AppContainer:
         self.repository = InMemoryRepository()
         self.clock_service = SimulatedClockService(datetime.now(timezone.utc))
         self.ticket_service = TicketService(self.repository, self.clock_service)
+        self.portal_service = PortalService(self.repository)
+        config = get_config()
+        self.portal_rate_limiter = PortalRateLimiter(
+            max_attempts=config.portal_lookup_max_attempts,
+            window_seconds=config.portal_lookup_window_seconds,
+        )
         self.seed_demo_data()
 
     def seed_demo_data(self) -> None:
@@ -72,3 +82,11 @@ def get_ticket_service() -> TicketService:
 
 def get_repository() -> InMemoryRepository:
     return container.repository
+
+
+def get_portal_service() -> PortalService:
+    return container.portal_service
+
+
+def get_portal_rate_limiter() -> PortalRateLimiter:
+    return container.portal_rate_limiter
