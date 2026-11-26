@@ -1,4 +1,9 @@
+import os
 from datetime import date, datetime, timezone
+from typing import Iterator
+
+from fastapi import HTTPException
+from psycopg import Error as DatabaseError
 
 from src.warranty_core import (
     Customer,
@@ -13,14 +18,18 @@ from src.warranty_core import (
 
 from src.warranty_app.config import get_config
 from src.warranty_app.portal_rate_limiter import PortalRateLimiter
+from src.warranty_core.database import get_connection
+from src.warranty_core.postgresql_repository import PostgreSQLRepository
+from src.warranty_core.services.postgresql_ticket_service import (
+    PostgreSQLTicketService
+)
 
 
 class AppContainer:
-    """Simple dependency container for the ticket intake module.
+    """Memory services for local demos and tests.
 
-    This keeps technology setup isolated from the domain core. The repository is
-    in-memory for local demo/testing; it can be replaced by a persistent
-    repository implementation without changing the ticket service.
+    Request dependencies select PostgreSQL when configured. Database connections
+    belong to individual requests and are never stored in this shared container.
     """
 
     def __init__(self) -> None:
@@ -76,7 +85,17 @@ def reset_container() -> AppContainer:
     return container
 
 
-def get_ticket_service() -> TicketService:
+def get_storage_mode() -> str:
+    """Use the same storage selection for ticket intake and customer lookup."""
+    storage = os.getenv("WARRANTY_STORAGE", "memory").strip().lower()
+    if storage not in {"memory", "postgresql"}:
+        raise ValueError(f"Unsupported storage mode: {storage}")
+    return storage
+
+
+def get_ticket_service():
+    if get_storage_mode() == "postgresql":
+        return PostgreSQLTicketService()
     return container.ticket_service
 
 
@@ -84,8 +103,21 @@ def get_repository() -> InMemoryRepository:
     return container.repository
 
 
-def get_portal_service() -> PortalService:
-    return container.portal_service
+def get_portal_service() -> Iterator[PortalService]:
+    if get_storage_mode() == "memory":
+        yield container.portal_service
+        return
+
+    try:
+        # Every lookup owns its connection; concurrent requests share no cursor
+        # or transaction. The connection closes after success or verification failure.
+        with get_connection() as connection:
+            yield PortalService(PostgreSQLRepository(connection))
+    except DatabaseError:
+        raise HTTPException(
+            status_code=503,
+            detail="Hệ thống tra cứu tạm thời không khả dụng. Vui lòng thử lại sau.",
+        ) from None
 
 
 def get_portal_rate_limiter() -> PortalRateLimiter:

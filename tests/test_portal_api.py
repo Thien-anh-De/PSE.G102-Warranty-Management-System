@@ -12,6 +12,7 @@ from src.warranty_core import DefectOrigin, WarrantyService
 
 @pytest.fixture
 def client(monkeypatch):
+    monkeypatch.setenv("WARRANTY_STORAGE", "memory")
     monkeypatch.setenv("PORTAL_LOOKUP_MAX_ATTEMPTS", "5")
     monkeypatch.setenv("PORTAL_LOOKUP_WINDOW_SECONDS", "60")
     container = dependencies.reset_container()

@@ -65,6 +65,7 @@ def enforce_lookup_limit(
         404: {"description": "Thông tin tra cứu không hợp lệ."},
         422: {"description": "Dữ liệu đầu vào không hợp lệ; không trả lại mã bí mật."},
         429: {"description": "Vượt giới hạn tra cứu; có tiêu đề Retry-After."},
+        503: {"description": "CSDL tạm thời không khả dụng; không trả chi tiết kết nối."},
     },
 )
 def lookup_ticket(

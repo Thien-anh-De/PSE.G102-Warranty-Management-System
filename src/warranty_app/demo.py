@@ -1,6 +1,7 @@
 """Opt-in, fictional data for demonstrating the customer portal locally."""
 
 import argparse
+import os
 from datetime import date, datetime, timezone
 from typing import List, Tuple
 
@@ -96,6 +97,9 @@ def main() -> None:
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=3000)
     args = parser.parse_args()
+    # This command explicitly demonstrates fictional records in RAM, even if
+    # the normal API is configured to use PostgreSQL through .env.
+    os.environ["WARRANTY_STORAGE"] = "memory"
     if not frontend_directory.is_dir():
         parser.error("Chưa có giao diện. Chạy npm ci và npm run build trong thư mục frontend trước.")
     lookups = seed_portal_demo_data(dependencies.container)

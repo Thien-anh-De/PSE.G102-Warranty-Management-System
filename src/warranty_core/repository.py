@@ -40,6 +40,9 @@ class InMemoryRepository:
     def find_ticket_by_id(self, ticket_id: str) -> Optional[WarrantyTicket]:
         return self.tickets.get(ticket_id)
 
+    def get_device(self, device_id: str) -> Optional[Device]:
+        return self.devices.get(device_id)
+
     def find_device_by_serial(self, serial: str) -> Optional[Device]:
         for d in self.devices.values():
             if d.serial_number == serial:
