@@ -1,0 +1,23 @@
+﻿
+ RUN  v5.1.2 C:/Thịnh/TieuLuan/CNPM/PSE.G102-Portal-Test/frontend
+
+ ✓ tests/warranty_lookup.test.jsx > customer lookup journey > requires both codes and focuses the first incomplete field 659ms
+ ✓ tests/warranty_lookup.test.jsx > customer lookup journey > submits both codes in a POST body and displays the verified public result 255ms
+ ✓ tests/warranty_lookup.test.jsx > customer lookup journey > hides and reveals the secret without submitting the form 172ms
+ ✓ tests/warranty_lookup.test.jsx > customer lookup journey > clears the old result on edits and never displays backend error details 131ms
+ ✓ tests/warranty_lookup.test.jsx > customer lookup journey > prevents duplicate requests while a lookup is pending 83ms
+ ✓ tests/warranty_lookup.test.jsx > customer lookup journey > shows rate-limit feedback and respects Retry-After 84ms
+ ✓ tests/warranty_lookup.test.jsx > customer lookup journey > handles a lost connection and allows a new attempt 119ms
+ ✓ tests/warranty_lookup.test.jsx > customer lookup journey > allows a new lookup when the retry period has expired 156ms
+ ✓ tests/warranty_lookup.test.jsx > customer lookup journey > rejects an inconsistent API response 74ms
+ ✓ tests/warranty_lookup.test.jsx > customer lookup journey > rejects an inconsistent API response 76ms
+ ✓ tests/warranty_lookup.test.jsx > customer lookup journey > rejects an inconsistent API response 53ms
+ ✓ tests/warranty_lookup.test.jsx > customer lookup journey > shows cancellation without implying that the repair journey completed 99ms
+ ✓ tests/warranty_lookup.test.jsx > customer lookup journey > renders device text safely and does not expose extra response fields 54ms
+ ✓ tests/warranty_lookup.test.jsx > customer lookup journey > resets both codes and returns keyboard focus to the ticket field 104ms
+
+ Test Files  1 passed (1)
+      Tests  14 passed (14)
+   Start at  14:26:01
+   Duration  4.49s (tests 53%, environment 34%, import 9%, setup 3%, transform 1%)
+

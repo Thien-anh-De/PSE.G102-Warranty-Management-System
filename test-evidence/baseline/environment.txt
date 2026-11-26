@@ -1,0 +1,8 @@
+﻿Device: DESKTOP-1BOU31L
+Branch: test/portal-integration-thinh
+Commit: 0d6cfdefa293204fc74b805acbd4bb156f707bbe
+Date: 2026-11-26 16:30:26 +07:00
+Python: Python 3.11.9
+Node: v26.13.1
+npm: 11.20.0
+Windows: Microsoft Windows NT 10.0.26200.0
