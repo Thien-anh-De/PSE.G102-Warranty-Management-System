@@ -57,3 +57,13 @@ Desktop.ini
 ~$*.docx
 ~$*.xlsx
 ~$*.pptx
+
+# Frontend
+node_modules/
+.next/
+frontend/out/
+frontend/coverage/
+
+# Keep frontend source modules despite the Python virtualenv lib/ rule above.
+!frontend/lib/
+!frontend/lib/**
