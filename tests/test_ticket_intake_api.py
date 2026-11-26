@@ -16,7 +16,8 @@ def reset_app_container():
 
 
 @pytest.fixture
-def client():
+def client(monkeypatch):
+    monkeypatch.setenv("WARRANTY_STORAGE", "memory")
     return TestClient(app)
 
 

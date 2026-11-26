@@ -146,6 +146,8 @@ python -m src.warranty_app.demo --port 3000
 Mở **http://127.0.0.1:3000**. FastAPI phục vụ cả giao diện đã build và API trên
 cùng địa chỉ. Dữ liệu minh họa chỉ được nạp khi chạy lệnh `demo` trên; quy trình
 khởi động API thông thường không tự tạo các phiếu này.
+Nếu bộ ZIP đã có `frontend/out`, có thể bỏ qua các lệnh npm và chạy ngay lệnh
+Python. Lệnh `demo` luôn chọn RAM; chế độ PostgreSQL được hướng dẫn ở Mục 4.6.
 
 | Mã phiếu mẫu | Mã tra cứu mẫu | Trạng thái |
 |---|---|---|
@@ -252,9 +254,12 @@ GitHub Actions chạy cả pytest, kiểm thử frontend và build trên PR vào
 
 ### 4.5. Giới hạn tích hợp hiện tại
 
-- Repository vẫn là `InMemoryRepository`, chưa có PostgreSQL/SQLAlchemy.
-  Khi phần lưu trữ sẵn sàng, cần tích hợp repository và kiểm tra lại với dữ liệu
-  bền vững; giữ hợp đồng API trên để giao diện tiếp tục sử dụng.
+- Tiếp nhận phiếu và portal dùng cùng lựa chọn `WARRANTY_STORAGE`: `memory`
+  hoặc `postgresql`. Bản PostgreSQL tái sử dụng SQL và repository từ nhánh
+  `feat/database-tung` (commit `a97ca44`), kết nối qua psycopg. Hợp đồng API
+  portal giữ nguyên. Các dịch vụ sửa chữa, kho và Dashboard vẫn cần nhóm
+  tích hợp riêng với tầng lưu trữ PostgreSQL; bộ kiểm thử portal đọc các trạng
+  thái đã lưu, không thay thế kiểm thử nghiệp vụ cập nhật sửa chữa trên CSDL.
 - Bộ giới hạn thử sai hiện dùng RAM của **một tiến trình**. Triển khai nhiều
   worker hoặc nhiều máy cần bộ đếm dùng chung, ví dụ Redis theo SAD. Khởi động
   lại ứng dụng sẽ xóa cả dữ liệu demo và bộ đếm.
@@ -267,3 +272,69 @@ GitHub Actions chạy cả pytest, kiểm thử frontend và build trên PR vào
   tự chứng minh đã đạt mục tiêu phản hồi dưới 3 giây ở tải thực tế.
 - Khi đưa nội dung/mã nguồn có AI hỗ trợ vào báo cáo, ghi nhận trung thực tại
   Phụ lục Z và dẫn chiếu theo AUR.99 trong mẫu báo cáo của nhóm.
+
+### 4.6. Chạy portal với PostgreSQL trên Windows
+
+Cài và khởi động PostgreSQL 16, tạo database `warranty_db` và tài khoản
+`warranty_user` có quyền tạo bảng trong database đó theo cấu hình nhóm.
+Tại thư mục gốc dự án, dùng CMD:
+
+```bat
+py -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+copy .env.example .env
+notepad .env
+```
+
+Trong `.env`, điền đúng host, port, database, user và mật khẩu của PostgreSQL
+đang chạy; giữ `WARRANTY_STORAGE=postgresql`. Port mặc định trong file mẫu là
+5433, cần sửa thành cổng thực tế của máy bạn (PostgreSQL thường dùng 5432).
+`.env` được bỏ qua bởi Git; không đưa file chứa mật khẩu lên repository.
+
+Kiểm tra kết nối, rồi khởi tạo 21 bảng trên **database trống**:
+
+```bat
+.venv\Scripts\python.exe -m src.warranty_core.database
+.venv\Scripts\python.exe -m database.init_db
+```
+
+Nếu database đã có cấu trúc từ phần của Tùng thì bỏ qua lệnh khởi tạo. Công cụ
+khởi tạo không xóa hoặc ghi đè các bảng sẵn có. Có thể thêm một phiếu minh họa
+được lưu qua `PostgreSQLTicketService` bằng lệnh sau; chạy lại sẽ dùng phiếu cũ:
+
+```bat
+.venv\Scripts\python.exe -m database.seed_portal_demo
+```
+
+Lưu **mã phiếu thực tế được in ra**, mã tra cứu mẫu là `HT-SQL-DEMO-001`.
+Mã phiếu phụ thuộc ngày tạo và bộ đếm trong CSDL, có thể khác mã ở Mục 4.1.
+Các phiếu khác được tiếp nhận qua `POST /api/v1/tickets` cũng dùng chung CSDL.
+
+Nếu chưa có `frontend/out`, build giao diện theo Mục 4.1. Khởi động API bình
+thường, phục vụ cả giao diện và dữ liệu PostgreSQL:
+
+```bat
+.venv\Scripts\python.exe -m uvicorn src.warranty_app.main:app --host 127.0.0.1 --port 3000
+```
+
+Mở http://127.0.0.1:3000 và nhập cặp mã từ lệnh tạo dữ liệu mẫu. Dừng rồi chạy
+lại lệnh uvicorn sẽ giữ nguyên dữ liệu đã lưu. Mỗi lần tra cứu mở một kết nối
+CSDL riêng và đóng sau khi xử lý; lỗi CSDL trả thông báo 503 chung, không lộ
+chi tiết kết nối. Lệnh `python -m src.warranty_app.demo` ở Mục 4.1 dành cho
+minh họa bằng RAM, kể cả khi `.env` đang cấu hình PostgreSQL.
+
+Chạy toàn bộ kiểm thử với PostgreSQL đã khởi tạo:
+
+```bat
+.venv\Scripts\python.exe -m pytest -v
+```
+
+Nếu chỉ kiểm tra chế độ RAM và chưa chạy PostgreSQL:
+
+```bat
+.venv\Scripts\python.exe -m pytest -v -m "not integration"
+```
+
+CI backend tạo PostgreSQL 16, chạy công cụ khởi tạo schema và toàn bộ kiểm
+thử, đồng thời vẫn giữ job kiểm thử/build frontend. Kiểm thử SQL dùng các bản
+ghi có ID riêng, dọn đúng dữ liệu của ca kiểm thử và không truncate bảng.
