@@ -1,3 +1,4 @@
+import os
 from datetime import date, datetime, timezone
 
 from src.warranty_core import (
@@ -8,6 +9,10 @@ from src.warranty_core import (
     TicketService,
     User,
     UserRole,
+)
+
+from src.warranty_core.services.postgresql_ticket_service import (
+    PostgreSQLTicketService
 )
 
 
@@ -66,8 +71,24 @@ def reset_container() -> AppContainer:
     return container
 
 
-def get_ticket_service() -> TicketService:
-    return container.ticket_service
+def get_ticket_service():
+
+    storage = os.getenv(
+        "WARRANTY_STORAGE",
+        "memory"
+    ).strip().lower()
+
+    if storage == "postgresql":
+
+        return PostgreSQLTicketService()
+
+    if storage == "memory":
+
+        return container.ticket_service
+
+    raise ValueError(
+        f"Unsupported storage mode: {storage}"
+    )
 
 
 def get_repository() -> InMemoryRepository:
